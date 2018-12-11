@@ -4,13 +4,43 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>DIY IoT Lamp Workshop</title>
+		<!-- Primer (https://primer.style/) -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/10.9.0/build.css" integrity="sha256-BBqc9dgsx+a7JMEvvfApoq2WsTfULA1IsicmrBt4nN8=" crossorigin="anonymous" />
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+
+		<!-- custom fonts -->
+		<link href="https://fonts.googleapis.com/css?family=Old+Standard+TT" rel="stylesheet">
+
+		<!-- custom styles -->
+		<style>
+			pre.serialmon {
+				background:white;
+				color:black;
+			}
+			.copybutton {
+				position:absolute;
+				top:0;
+				right:-1.25em;
+			}
+			[hidden] {
+				/* override Primer style which was hiding slides in the "overview" mode */
+				display: block !important;
+			}
+			li.equation {
+				/* meant to approximate the look of a LaTeX equation */
+				font-family: 'Old Standard TT', serif;
+				font-style: italic;
+			}
+		</style>
 
 		<!-- Printing and PDF exports -->
 		<script>
@@ -24,25 +54,1109 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section id="title">
+					<h1>DIY IoT Lamp Workshop</h1>
+					<p>Leonard Lee</p>
+					<p><a href="https://github.com/leoclee"><small><i class="fab fa-github"></i> leoclee</small></a></p>
+				</section>
+
+				<section id="iot-definition">
+					<h2>Internet of Things (IoT)</h2>
+					<blockquote cite="https://en.wikipedia.org/wiki/Internet_of_things">
+						&ldquo;extend[s] Internet connectivity beyond standard devices, such as desktops, laptops, smartphones and tablets, to any range of traditionally dumb or non-internet-enabled physical devices and everyday objects&rdquo;
+					</blockquote>
+				</section>
+
+				<section id="iot-examples">
+					<h2>Example Things:</h2>
+					<ul>
+						<li>speakers</li>
+						<li>televisions</li>
+						<li>lighting</li>
+						<li>thermostats</li>
+						<li>kitchen appliances</li>
+						<li>cars</li>
+						<li>fitness equipment</li>
+						<li>vending machines/kiosks</li>
+					</ul>
+				</section>
+
+				<section id="iot-why">
+					<h2>Why?</h2>
+					<p>Connecting devices to the internet and to each other provide some form of value:</p>
+					<ul>
+						<li>home automation (smart homes)</li>
+						<li>cloud integration</li>
+						<li>real time monitoring/tracking/notification</li>
+					</ul>
+				</section>
+
+				<section id="objectives">
+					<h2>Objectives</h2>
+					<ul>
+							<li>build a functional IoT lamp</li>
+							<li>experience a hands-on electronics project</li>
+							<li>learn about various network protocols</li>
+							<li>try Arduino coding</li>
+							<li>inspire participants with the possibilities of IoT</li>
+					</ul>
+				</section>
+
+				<section id="supplies" data-background-image="images/surprise.jpg" data-background-opacity=".1">
+					<h2>Supplies</h2>
+						<ul>
+						<li><a href="https://wiki.wemos.cc/products:d1:d1_mini">WEMOS/LOLIN D1 Mini</a> (or clone)</li>
+						<li><a href="https://www.ikea.com/us/en/catalog/products/60356144/">IKEA TVÄRS table lamp</a></li>
+						<li>5V individually addressable RGB LED strip (SK6812 (mini)/WS2811/WS2812(B)/WS2813/<a href="https://www.adafruit.com/category/168">NeoPixels</a>)</li>
+						<li>micro USB cable</li>
+						<li>5V USB power supply</li>
+						<li>paper towel/toilet paper cardboard tube</li>
+						<li>wires</li>
+					</ul>
+				</section>
+
+				<section id="esp8266" data-background-image="https://wiki.wemos.cc/_media/products:d1:d1_mini_v3.1.0_1_16x9.jpg" data-background-opacity=".25">
+					<h2>D1 Mini/ESP8266</h2>
+					<p>The D1 Mini is a development board that uses the ESP8266 microcontroller to connect to the internet. It is much more powerful than some of the standard Arduino boards, though it has slightly fewer GPIO pins.</p>
+					<p>Overall, it is a good balance between size, capability, and cost.</p>
+					<!-- TODO stop hotlinking background photo -->
+				</section>
+
+				<section id="pi" data-background-image="https://www.raspberrypi.org/app/uploads/2017/05/Raspberry-Pi-3-1-1619x1080.jpg" data-background-opacity=".25">
+					<h2>What About Raspberry Pi?</h2>
+					<!-- TODO stop hotlinking background photo -->
+					<ul>
+						<li>Raspberry Pi (and other Single Board Computers) are full fledged computers that run an <abbr title="operating system">OS</abbr> and can run multiple programs.</li>
+						<li>The D1 Mini (and other Arduino compatible boards) are microcontrollers that run 1 program at a time.</li>
+						<li>While the Pi is (waaay) more powerful and can do more, it also takes longer to boot up, is bigger, is more sensitive to power outages, and costs more--basically overkill for a project like this.</li>
+					</ul>
+				</section>
+
+				<section id="code-prep">
+					<h2>Preparing the IDE</h2>
+					<ol>
+						<li>install <a href="https://wiki.wemos.cc/downloads">CH340G driver</a></li>
+						<li>install the <a href="https://www.arduino.cc/en/Main/Software">Arduino <abbr title="integrated development environment">IDE</abbr></a></li>
+						<li>Preferences > add an Additional Boards Manager URL: <pre><code class="shell copy">http://arduino.esp8266.com/stable/package_esp8266com_index.json</code></pre></li>
+						<li>Tools > Board > Boards Manager... > esp8266 > Install</li>
+						<li>Tools > Board > ESP8266 Modules > LOLIN(WEMOS) D1 R2 & Mini</li>
+					</ol>
+				</section>
+
+				<section>
+					<section id="first-sketch">
+						<h2>Upload Your First Sketch</h2>
+						<ol>
+							<li>connect the D1 mini to your computer using the micro USB cable</li>
+							<li>select the correct COM port under Tools > Port</li>
+							<li>open the Blink example sketch under File > Examples > ESP8266 > Blink</li>
+							<li>click on the Upload icon at the top (or CTRL+U/⌘+U)</li>
+							<li>After the sketch is successfully uploaded, the blue LED on the D1 Mini should start blinking! This is the <a href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">Hello World</a> of electronics.</li>
+						</ol>
+					</section>
+					<section id="win-com-port">
+						<figure><img src="images/device-manager-com-port.png" style="margin:0;"/><figcaption><small>On Windows, open the Device Manager to find the port named USB-SERIAL CH340</small></figcaption></figure>
+					</section>
+				</section>
+
+				<section id="blink">
+					<h2>Blink: What's Happening in <code>setup()</code> and <code>loop()</code></h2>
+					<pre><code class="cpp copy">void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);     // Initialize the LED_BUILTIN pin as an output
+}
+
+void loop() {
+  digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level
+  delay(1000);                      // Wait for a second
+  digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
+  delay(2000);                      // Wait for two seconds (to demonstrate the active low LED)
+}</code></pre>
+					<p><small>File > Examples > ESP8266 > Blink</small></p>
+				</section>
+
+				<section id="delay">
+					<h2>The Problem with <code>delay()</code></h2>
+					<p><a href="https://www.arduino.cc/reference/en/language/functions/time/delay/"><code>delay()</code></a> is a blocking function that pauses execution until a certain amount of time has passed. During this time, it brings most other activity to a halt (the ESP8266 has a single core). This is problematic for any device which needs to react quickly to user input or other events.</p>
+				</section>
+
+				<section id="blink-without-delay">
+					<h2>Blink Without Delay</h2>
+					<p><small>Solves the problem by only executing code after a certain amount of time has passed.</small></p>
+					<pre><code class="cpp copy">int ledState = LOW;
+
+unsigned long previousMillis = 0;
+const long interval = 1000;
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);
+}
+
+void loop() {
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval) {
+    previousMillis = currentMillis;
+    if (ledState == LOW) {
+      ledState = HIGH;  // Note that this switches the LED *off*
+    } else {
+      ledState = LOW;  // Note that this switches the LED *on*
+    }
+    digitalWrite(LED_BUILTIN, ledState);
+  }
+}</code></pre>
+					<p><small>File > Examples > ESP8266 > BlinkWithoutDelay</small></p>
+				</section>
+
+				<section id="serial-monitor">
+					<h2>Serial Monitor</h2>
+					<p>The Serial Monitor can be used to display text from the microcontroller for debugging purposes.</p>
+					<p>Tools > Serial Monitor (or Ctrl+Shift+M/⌘+Shift+U)</p>
+				</section>
+
+				<section id="serial-monitor-screenshot">
+					<img src="images/serialmonitor.png"/>
+				</section>
+
+				<section id="hello-world">
+					<h2>Software Hello World</h2>
+					<ul>
+						<li>Add the following to the beginning of the <code>setup()</code> function:</li>
+						<pre><code class="cpp copy">  Serial.begin(115200);
+  Serial.println("Hello, World!");</code></pre></li>
+						<li>Set the baud rate on the Serial Monitor to match the above <code>Serial.begin()</code> call (115200)</li>
+						<li>Re-upload the program; you should be able to see "Hello, World!" printed in the Serial Monitor window</li>
+					</ul>
+				</section>
+
+				<section id="led-strip" data-background-video="https://cdn-shop.adafruit.com/product-videos/1200x900/2969-04.mp4" data-background-video-loop="loop" data-background-opacity=".5" data-background-video-muted="true">
+					<h2>WS281X/NeoPixel LED Strips</h2>
+					<ul>
+						<li>Individually addressable: each LED can be a different color/brightness at the same time</li>
+						<li>Run on 5V DC, same as what is provided by USB</li>
+						<li>LED density from 30-144 LEDs/m</li>
+						<li>Some strips are weather/water proof (<a href="https://en.wikipedia.org/wiki/IP_Code">IP</a> 6X rated) at the cost of a few mm of thickness</li>
+						<li>Arrows indicate the direction of data flow</li>
+						<li>Can be cut along the copper pads</li>
+						<li>Adhesive backing</li>
+					</ul>
+				</section>
+
+				<section id="wiring">
+					<h2>Wiring Time</h2>
+					<p>Connect the LED strip to the D1 mini by soldering three wires:</p>
+					<p><small>⚠️ Ask for help if you are unable to solder the connections yourself! ⚠️</small></p>
+					<table>
+						<thead>
+							<tr>
+								<th>D1 mini</th>
+								<th>LED strip</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>D2</td>
+								<td>DI/DIN</td>
+							</tr>
+							<tr>
+								<td>G/GND</td>
+								<td>GND/-</td>
+							</tr>
+							<tr>
+								<td>5V</td>
+								<td>5V/+5V/VCC/+</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section id="wiring-diagram">
+					<h2>Wiring Diagram</h2>
+					<p><small>⚠️ Your LED strip's connection leads may not be in the same order! Check the labels! ⚠️</small></p>
+					<img src="images/fritzing.png"/>
+				</section>
+
+				<section id="wiring-photo">
+					<!-- TODO wiring photo goes here -->
+				</section>
+
+				<section id="level-shifting">
+					<h2>A Note About <a href="https://en.wikipedia.org/wiki/Level_shifter">Level Shifting</a></h2>
+					<p>D2 pin connects directly to the strip's data input ("DI"/"DIN"). D2's output voltage is 3.3V and DI expects 5V*--but we are hoping to avoid level shifting as long as it works to keep things simple.</p>
+					<p><small>* According to the <a href="http://www.world-semi.com/DownLoadFile/108">WS2812B datasheet</a>, the minimum voltage for highs on the data input signal ought to be 0.7&times;V<sub>DD</sub> or 3.5V with a 5V power supply. However, this setup still works because it's <em>close enough?</em> <span style="white-space: nowrap;">¯\_(ツ)_/¯</span> You can try to avoid flickering issues by using a power supply that is no greater than 5V (some go to 5.25V).</small></p>
+				</section>
+
+				<section id="read-power-supply">
+					<h2>Reading a Power Supply</h2>
+					<p><a href="https://amzn.to/2Ro8FeA"><figure><img src="images/5v.jpg" style="margin:0;"/><figcaption><small>Amazon.com</small></figcaption></figure></a></p>
+					<p style="position:absolute;top:30%;left:-140px;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;" class="fragment"><strong>INPUT</strong><br>∿ <a href="https://en.wikipedia.org/wiki/Alternating_current"><strong>A</strong>lternating <strong>C</strong>urrent</a><br>100-240V</p>
+					<p style="position:absolute;top:30%;right:-50px;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;" class="fragment"><strong>OUTPUT</strong><br>⎓ <a href="https://en.wikipedia.org/wiki/Direct_current"><strong>D</strong>irect <strong>C</strong>urrent</a><br>5V<br>3000 mA</p>
+					<p style="position:absolute;top:15%;margin-left:auto;margin-right:auto;left:0;right:0;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;" class="fragment">Switching (vs Transformer)</p>
+					<p style="position:absolute;bottom:10%;right:-50px;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;" class="fragment"><a href="https://en.wikipedia.org/wiki/FCC_Declaration_of_Conformity"><abbr title="Federal Communications Commission">FCC</abbr> mark</a> and <a href="https://www.ul.com/marks/ul-listing-and-classification-marks/appearance-and-significance/marks-for-north-america/"><abbr title="Underwriters Laboratories">UL</abbr> Listed</a></p>
+					<p style="position:absolute;bottom:10%;left:0;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;" class="fragment"><a href="https://www.cui.com/efficiency-standards">Efficiency Level</a> VI</p>
+				</section>
+
+				<section id="power-reqs">
+					<h2>⚡ Power Requirements ⚡</h2>
+					<ul>
+						<li>Each LED can draw up to 60 mA at maximum brightness white.</li>
+						<li>The D1 mini can also draw up to 250 mA.</li>
+						<li>Some computer USB ports can only supply 500 mA. Therefore, avoid setting the LEDs to max brightness or limit the number of LEDs lit at the same time.</li>
+						<li>The D1 mini also has a 500 mA fuse for the 5V pin. To support more LEDs, you should bypass powering the LEDs through the 5V pin (more on this later).</li>
+						<li class="equation">⌊(supply-250)/60⌋ = # of max brightness LEDs</li>
+					</ul>
+				</section>
+
+				<section id="fastled">
+					<h2>FastLED Library</h2>
+					<ul>
+						<li>Libraries are packages of code that can provide extra functionality for your sketches. Don't reinvent the wheel.</li>
+						<li><q cite="http://fastled.io/"><a href="http://fastled.io/">FastLED</a> is a fast, efficient, easy-to-use Arduino library for programming addressable LED strips and pixels</q></li>
+						<li>Support for <abbr title="hue saturation value">HSV</abbr> color model</li>
+						<li>Installation: Tools > Manage Libraries... > FastLED > Install</li>
+					</ul>
+				</section>
+
+				<section id="fastled-blink">
+					<h2>FastLED Blink</h2>
+					<p><small>After loading the FastLED Blink example, remove the commented out code and set <code>DATA_PIN</code> to our data pin and <code>NUM_LEDS</code> to the number of LEDs in the strip:</small></p>
+					<pre><code class="cpp copy">#include &lt;FastLED.h&gt;
+
+#define NUM_LEDS 10    // number of LEDs in the strip/ring
+#define DATA_PIN D2    // the GPIO pin for the LEDs' data
+
+// Define the array of leds
+CRGB leds[NUM_LEDS];
+
+void setup() {
+  FastLED.addLeds&lt;NEOPIXEL, DATA_PIN&gt;(leds, NUM_LEDS);
+}
+
+void loop() {
+  // Turn the LED on, then pause
+  leds[0] = CRGB::Red;
+  FastLED.show();
+  delay(500);
+  // Now turn the LED off, then pause
+  leds[0] = CRGB::Black;
+  FastLED.show();
+  delay(500);
+}</code></pre>
+					<p><small>File > Examples > FastLED > Blink</small></p>
+				</section>
+
+				<section id="fastled-blink-without-delay">
+					<h2>Remove <code>delay()</code>... Again</h2>
+					<p>This time, we get to use FastLED's <code>EVERY_N_MILLISECONDS</code> function*! Replace the <code>loop()</code> function with the following:</p>
+					<pre><code class="cpp copy">void loop() {
+  EVERY_N_MILLISECONDS(500) {
+    if (leds[0].r == 0) {
+      leds[0] = CRGB::Red;   // Turn the LED on
+    } else {
+      leds[0] = CRGB::Black; // Turn the LED off
+    }
+    FastLED.show();
+  }
+}</code></pre>
+					<p><small>* actually a <a href="https://gcc.gnu.org/onlinedocs/cpp/Function-like-Macros.html#Function-like-Macros">preprocessor function-like macro</a></small></p>
+				</section>
+
+				<section id="show-current-color">
+					<h2>Now For Something Useful</h2>
+					<p>That blinking program was a good exercise, but we won't need to use <code>EVERY_N_MILLISECONDS</code> until later. Instead, let's work on making the LEDs light up with the color that we specify.</p>
+				</section>
+
+				<section id="show-current-color-1">
+					<p>First, add global variables under the <code>#include &lt;FastLED.h&gt;</code> line, which will keep track of the current state:</p>
+					<pre><code class="cpp copy">// state
+unsigned int hue = 180;   // hue state (0-359)
+uint8_t saturation = 100; // saturation state (0-100)
+uint8_t value = 50;       // value/brightness state (0-100)
+boolean state = true;     // on/off state (true = "ON", false = "OFF")
+char effect[10] = "none"; // "none" | "colorloop" | "trail" | "rainbow"
+const char* on_state = "ON";
+const char* off_state = "OFF";</code></pre>
+				</section>
+
+				<section id="show-current-color-2">
+					<p>Next, add a global variable <code>currentColor</code> under the decalaration for <code>leds</code> near the top:</p>
+					<pre><code class="cpp copy">CRGB leds[NUM_LEDS];
+CHSV currentColor = CHSV(hue * 255 / 359, saturation * 255 / 100, value * 255 / 100);</code></pre>
+				</section>
+
+				<section id="show-current-color-3">
+					<p>Finally, we'll need to replace the <code>loop()</code> function with:</p>
+					<pre><code class="cpp copy">void loop() {
+  // LED
+  loop_led();
+}
+
+void loop_led() {
+  if (state) {
+    FastLED.showColor(currentColor);
+  } else {
+    FastLED.clear(true); // turn off all LEDs
+  }
+}</code></pre>
+				</section>
+
+				<section id="show-current-color-4">
+					<!-- TODO image of it showing the current color -->
+				</section>
+
+				<section id="wifi-begin">
+					<h2>Connecting to WiFi</h2>
+					<p>Let's start to add some WiFi capabilities. Our first task is to set up <a href="https://github.com/tzapu/WiFiManager">WiFiManager</a>, which will make it unnecessary to hardcode our WiFi connection info.</p>
+					<p>Start by installing the WiFiManager library (Tools > Manage Libraries... > WiFiManager > Install)</p>
+				</section>
+
+				<section id="wifimanager-global">
+					<p>Then, add the following includes at the top, near the <code>FastLED.h</code> include:</p>
+					<pre><code class="cpp copy">#include &lt;ESP8266WiFi.h&gt;
+#include &lt;DNSServer.h&gt;
+#include &lt;ESP8266WebServer.h&gt;
+#include &lt;WiFiManager.h&gt;</code></pre>
+					<p><small>some of these libraries are installed as part of the ESP8266 board</small></p>
+					<div class="fragment">
+					<p>Next, add a global <code>wifiManager</code> variable above the <code>setup()</code> function:</p>
+					<pre><code class="cpp copy">// WiFi
+WiFiManager wifiManager;</code></pre>
+					</div>
+				</section>
+
+				<section id="wifi-setup">
+					<p>Finally, replace the <code>setup()</code> function with:</p>
+					<pre><code class="cpp copy">/**
+  Unique identifer used for wifi hostname, AP SSID, MQTT ClientId, etc.
+*/
+#define ID_PREFIX "LIGHT-"
+String getIdentifier() {
+  // the ESP8266's chip ID is probably unique enough for our purposes
+  // see: https://bbs.espressif.com/viewtopic.php?t=1303
+  // see: https://github.com/esp8266/Arduino/issues/921
+  String chipId = String(ESP.getChipId(), HEX);
+  chipId.toUpperCase();
+  return ID_PREFIX + chipId;
+}
+
+void setup() {
+  Serial.begin(115200);
+  Serial.println();
+
+  // LED
+  FastLED.addLeds&lt;NEOPIXEL, DATA_PIN&gt;(leds, NUM_LEDS);
+
+  // WiFi
+  WiFi.hostname(getIdentifier().c_str());
+  wifiManager.autoConnect(getIdentifier().c_str());
+  Serial.printf("WiFi Hostname: %s\n", WiFi.hostname().c_str());
+  Serial.printf("WiFi MAC addr: %s\n", WiFi.macAddress().c_str());
+  Serial.printf("WiFi SSID: %s\n", WiFi.SSID().c_str());
+}</code></pre>
+				</section>
+
+				<section id="wifimanager-ap">
+					<p>After uploading the code, it's time to tell the D1 mini which network to connect to:</p>
+					<ol>
+						<li>In the Serial Monitor, look for a line that indicates the access point name:<pre class="serialmon">*WM: Configuring access point...
+*WM: <mark>LIGHT-ABC123</mark></pre></li>
+						<li>On your phone or laptop, look for an open network that matches (e.g., LIGHT-ABC123) and connect to it.</li>
+						<li>Once connected, you should see a prompt to sign in (e.g., "Tap here to sign in to network").</li>
+					</ol>
+				</section>
+
+				<section id="wifimanager-captiveportal">
+					<!-- TODO screenshot of wifimanager captive portal -->
+				</section>
+
+				<section id="wifi-connected">
+					<p>After the D1 mini restarts, verify connectivity to the network by checking for an assigned IP address in the Serial Monitor:</p>
+					<pre class="serialmon">*WM:
+*WM: AutoConnect
+*WM: Connecting as wifi client...
+*WM: Using last saved values, should be faster
+*WM: Connection result:
+*WM: 3
+<mark>*WM: IP Address:
+*WM: 192.168.1.206</mark>
+WiFi Hostname: LIGHT-ABC123</pre>
+				</section>
+
+				<section id="json">
+					<h2>JSON payload</h2>
+					<p>Let's define the kinds of messages we will be sending back and forth with our WiFi connected device. <a href="https://www.json.org/"><abbr title="JavaScript Object Notation">JSON</abbr></a> is a standard, compact, yet human-readable format:</p>
+					<pre><code class="json">{
+  "state" : "ON",
+  "brightness" : 100,
+  "color" : {
+    "h" : 0,
+    "s" : 100
+  },
+  "effect" : "none"
+}</code></pre>
+					<p><small>used to describe the current state and to request a change, regardless of protocol</small></p>
+				</section>
+
+				<section id="json-optional">
+					<h2>Optional Fields</h2>
+					<p>When requesting a change, you can omit fields that are not required. This allows requests to be transmitted quicker and avoids unnecessary processing.</p>
+					<pre><code class="json">{"brightness":25}</code></pre>
+					<p><small>whitespace outside of double quotes is ignored</small></p>
+				</section>
+
+				<section id="arduino-json">
+					<h2>ArduinoJson Library</h2>
+					<p>We will be using the <a href="https://arduinojson.org">ArduinoJson</a> library to work with JSON in our program.</p>
+					<p>After installing the latest <mark>5.x</mark> version of the libary via the Library Manager (Tools > Manage Libraries...), add this include to the top:</p>
+					<pre><code class="cpp copy">#include &lt;ArduinoJson.h&gt;</code></pre>
+					<p><small>⚠️ ArduinoJson 6.x is installed by default, but it is still in beta! ⚠️</small></p>
+				</section>
+
+				<section id="http-server">
+					<h2>HTTP server</h2>
+					<p>We will set up an HTTP server to handle incoming requests to either query for the current state or change the current state.</p>
+					<p>First, we need to add a global variable for our HTTP server. You can put this under the "WiFi" section of global variables:</p>
+					<pre><code class="cpp copy">// HTTP server
+#define HTTP_SERVER_PORT 80
+ESP8266WebServer server(HTTP_SERVER_PORT);</code></pre>
+				</section>
+
+				<section id="http-server-setup">
+					<p>Next, add the following to the <code>setup()</code> function, after the "WiFi" section:</p>
+					<pre><code class="cpp copy">  // HTTP server
+  server.on("/hello", HTTP_GET, []() {
+    server.send(200, "text/plain", "Hello, World!");
+  });
+  server.on("/light", HTTP_GET, []() {
+    server.send(200, "application/json", getStateJson());
+  });
+  server.on("/light", HTTP_PUT, []() {
+    if (!server.hasArg("plain")) {
+      server.send(400, "text/plain", "no body");
+      return;
+    }
+
+    handleJsonPayload(server.arg("plain").c_str());
+    server.send(204);
+  });
+  server.begin();
+  Serial.printf("HTTP server started on port %d\n", HTTP_SERVER_PORT);</code></pre>
+					<p><small>Each <code>on()</code> call defines how incoming HTTP requests are handled.</small></p>
+				</section>
+
+				<section id="add-http-to-loop">
+					<p>We need to add this to the the main <code>loop()</code> function (can go at the beginning before the "LED" section):</p>
+					<pre><code class="cpp copy">  // HTTP
+  server.handleClient();</code></pre>
+					<p>This makes it so that on each pass of the loop, we handle any new incoming HTTP requests.</p>
+				</section>
+
+				<section id="get-state-json">
+					<p>Add the <code>getStateJson()</code> function at the very bottom of the sketch:</p>
+					<pre><code class="cpp copy">/**
+   return a JSON string representation of the current state
+*/
+String getStateJson() {
+  // code partially generated using https://arduinojson.org/v5/assistant/
+  const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(5);
+  DynamicJsonBuffer jsonBuffer(bufferSize);
+  JsonObject& root = jsonBuffer.createObject();
+  root["id"] = getIdentifier(); // not really part of the state, but doesn't hurt to include it
+  root["brightness"] = value;
+  root["state"] = state ? "ON" : "OFF";
+  root["effect"] = effect;
+  JsonObject& color = root.createNestedObject("color");
+  color["h"] = hue;
+  color["s"] = saturation;
+
+  String jsonString;
+  root.printTo(jsonString);
+  return jsonString;
+}</code></pre>
+				</section>
+
+				<section id="handle-json-payload-temp">
+					<p>We'll come back to this... for now, let's just paste this function at the bottom so that it can compile while uploading:</p>
+					<pre><code class="cpp copy">void handleJsonPayload(const char* payload) {
+  // TODO actually handle the payload and not just print it out
+  Serial.println(payload);
+}</code></pre>
+				</section>
+
+				<section id="curl-get">
+					<h2>HTTP Tests Using cURL</h2>
+					<p><a href="https://curl.haxx.se">curl</a> is a command line tool that can be used to make HTTP requests.</p>
+					<p>Connect to the same network as the microcontroller. Then, using the IP address printed out in the Serial Monitor, run the following in a Command Prompt/Terminal/shell:</p>
+					<pre><code class="shell copy">curl http://192.168.1.206/hello</code></pre>
+					<div class="fragment">
+						<p>You should see the following text:</p>
+						<pre><code class="shell">Hello, World!</code></pre>
+					</div>
+				</section>
+
+				<section id="curl-get2">
+					<p>Now let's hit a URL that gets the current state:</p>
+					<pre><code class="shell copy">curl http://192.168.1.206/light</code></pre>
+					<div class="fragment">
+						<p>You should see a JSON response which describes the current state variables.</p>
+						<pre><code class="shell">{"id":"LIGHT-ABC123","brightness":50,"state":"ON","effect":"none","color":{"h":180,"s":100}}</code></pre>
+					</div>
+				</section>
+
+				<section id="curl-put">
+					<p>Let's max out the brightness with a PUT request:</p>
+					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"brightness\":100}" http://192.168.1.206/light</code></pre>
+					<div class="fragment">
+						<p>You should see the JSON that was the "data" parameter printed out in the Serial Monitor...</p>
+						<pre class="serialmon">{"brightness":100}</pre>
+					</div>
+					<p class="fragment">We should probably go back and finish that <code>handleJsonPayload()</code> function, huh?</p>
+				</section>
+
+				<section id="handle-json-payload">
+					<p>Replace the <code>handleJsonPayload()</code> function with the following:</p>
+					<pre><code class="cpp copy">/*
+  sets the hue state; an update will not be triggered until updateColor() is called
+*/
+void setHue(int h) {
+  hue = h % 360;
+}
+
+/*
+   sets the saturation state; an update will not be triggered until updateColor() is called
+*/
+void setSaturation(int s) {
+  saturation = constrain(s, 0, 100);
+}
+
+/*
+  sets the value state; an update will not be triggered until updateColor() is called
+*/
+void setBrightness(int brightness) {
+  value = constrain(brightness, 0, 100);
+}
+
+/**
+   Sets the toColor using a FastLED CHSV object based on the current color state, which requires converting traditional HSV scales to FastLED's 0-255
+   see: https://github.com/FastLED/FastLED/wiki/FastLED-HSV-Colors#numeric-range-differences-everything-here-is-0-255
+*/
+void updateColor() {
+  setColor(CHSV(hue * 255 / 359, saturation * 255 / 100, value * 255 / 100));
+}
+
+/**
+   sets the toColor using a FastLED CHSV object; the fromColor is set to the currentColor
+*/
+void setColor(CHSV toChsv) {
+  Serial.printf("setting color to CHSV(%d,%d,%d)\n", toChsv.h, toChsv.s, toChsv.v);
+
+  currentColor = toChsv;
+}
+
+/**
+  returns true if the given effect string is non-empty, one of the valid effect values, and different from the current state's effect; false otherwise
+*/
+bool isValidAndDifferentEffect(const char *ef) {
+  return ef && (strcmp(ef, "none") == 0 || strcmp(ef, "colorloop") == 0 || strcmp(ef, "trail") == 0 || strcmp(ef, "rainbow") == 0) && strcmp(ef, effect) != 0;
+}
+
+/**
+   Processes the given JSON string, making any state changes as necessary.
+*/
+void handleJsonPayload(const char* payload) {
+  // (somewhat) adheres to Home Assistant's MQTT JSON Light format (https://www.home-assistant.io/components/light.mqtt_json/)
+  // code partially generated using https://arduinojson.org/v5/assistant/
+  const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(4);
+  DynamicJsonBuffer jsonBuffer(bufferSize);
+  JsonObject& root = jsonBuffer.parseObject(payload);
+
+  // state
+  const char* stateJson = root["state"]; // "ON" or "OFF"
+  if (stateJson) {
+    if (!state && strcmp(stateJson, on_state) == 0) {
+      state = true;
+    } else if (state && strcmp(stateJson, off_state) == 0) {
+      state = false;
+    }
+  }
+
+  // effect
+  const char* effectJson = root["effect"];
+  if (isValidAndDifferentEffect(effectJson)) {
+    strcpy(effect, effectJson);
+  }
+
+  // color
+  bool colorChanged = false;
+  JsonVariant hueJson = root["color"]["h"];        // 0 to 359
+  if (hueJson.success() && hue != hueJson.as&lt;int&gt;()) {
+    setHue(hueJson.as&lt;int&gt;());
+    colorChanged = true;
+  }
+  JsonVariant saturationJson = root["color"]["s"]; // 0 to 100
+  if (saturationJson.success() && saturation != saturationJson.as&lt;int&gt;()) {
+    setSaturation(saturationJson.as&lt;int&gt;());
+    colorChanged = true;
+  }
+  JsonVariant brightness = root["brightness"];     // 0 to 100
+  if (brightness.success() && value != brightness.as&lt;int&gt;()) {
+    setBrightness(brightness.as&lt;int&gt;());
+    colorChanged = true;
+  }
+  if (colorChanged) {
+    updateColor();
+  }
+}</code></pre>
+				</section>
+
+				<section id="curl-put2">
+					<h2>Max Brightness</h2>
+					<p>Upload the code and try that same max brightness PUT request again:</p>
+					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"brightness\":100}" http://192.168.1.206/light</code></pre>
+					<p class="fragment" style="font-size:100px;">😎</p>
+				</section>
+
+				<section id="curl-other">
+					<h2>Other Curl Commands To Try</h2>
+					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"state\":\"OFF\"}" http://192.168.1.206/light</code></pre>
+					<p><small><q>turn off the light, turn off the light</q> <span class="fragment">- Nelly Furtado</span></small></p>
+					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"state\":\"ON\"}" http://192.168.1.206/light</code></pre>
+					<p><small><q>just gimme the light</q> <span class="fragment">- Sean Paul</span></small></p>
+					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"color\":{\"h\":0,\"s\":100},\"brightness\":50}" http://192.168.1.206/light</code></pre>
+					<p><small><q>(Roxanne) put on the red light</q> <span class="fragment">- The Police</span></small></p>
+					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"color\":{\"s\":0},\"brightness\":100}" http://192.168.1.206/light</code></pre>
+					<p><small><q>all of the lights, all of the lights</q> <span class="fragment">- Ye</span></small></p>
+				</section>
+
+				<section id="webpage">
+					<h2>Time To Build A Webpage</h2>
+					<p>Command line tools are fun and all, but ideally there would be a more user-friendly way of interacting with our server using a browser.</p>
+					<!-- TODO screenshot of webpage -->
+				</section>
+
+				<section id="html-file">
+					<h2>Create an HTML File</h2>
+					<ol>
+						<li>Sketch > Show Sketch Folder</li>
+						<li>Create a new folder/directory named <code>data</code></li>
+						<li>Inside of <code>data</code>, create a new file named <code>index.html</code> with the following contents:<pre><code class="html copy">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;UTF-8&quot;&gt;
+&lt;title&gt;Hello&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+Hello, World!
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></li>
+					</ol>
+				</section>
+
+				<section id="spiffs">
+					<h2>SPIFFS</h2>
+					<p><abbr title="Serial Peripheral Interface Flash File System">SPIFFS</abbr> is a file system that we can use to store persistent data. We will use it to store:</p>
+					<ul>
+						<li>static web content (HTML, CSS, JS) to be served by the webserver</li>
+						<li>a JSON representation of the current state (later)</li>
+					</ul>
+				</section>
+
+				<section id="esp8266fs-plugin">
+					<h2>Arduino ESP8266 filesystem uploader</h2>
+					<ul>
+						<li>follow the instructions at <a href="https://github.com/esp8266/arduino-esp8266fs-plugin" target="_blank">Arduino ESP8266 filesystem uploader's github page</a> to download and install the plugin</li>
+						<li>The D1 mini has a 4M flash chip and the file system can be configured to be 1M, 2M, or 3M. We will configure it to use 1M to allow more memory for the sketch, OTA, etc.: Tools > Flash Size > 4M (1M SPIFFS)</li>
+					</ul>
+				</section>
+
+				<section id="spiffs-upload">
+					<h2>Upload Data to SPIFFS</h2>
+					<ul>
+						<li>before uploading data, close the Serial Monitor window</li>
+						<li>Tools > ESP8266 Sketch Data Upload</li>
+						<!-- TODO grab screenshot from https://github.com/esp8266/arduino-esp8266fs-plugin -->
+					</ul>
+				</section>
+
+				<section id="serve-static">
+					<p>Now we need to make changes to the sketch to serve up the file on certain requests:</p>
+					<ul>
+						<li>
+							<p>Add the following include:</p>
+							<pre><code class="cpp copy">#include &lt;FS.h&gt;</code></pre>
+						</li>
+						<li>
+							<p>Add the following line in the <code>setup()</code> function before the calls to <code>server.on()</code>:</p>
+							<pre><code class="cpp copy">  server.serveStatic("/", SPIFFS, "/index.html"); // handle root requests</code></pre>
+						</li>
+					</ul>
+				</section>
+
+				<section id="test-html">
+					<p>You should now be able to view the webpage on a browser:</p>
+					<img src="images/helloworld-webpage.png"/>
+				</section>
+
+				<section id="real-html">
+					<p>Now let's modify <code>index.html</code> to have something more useful and re-upload:</p>
+					<pre><code class="html copy">&lt;!DOCTYPE html&gt;
+&lt;html lange=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;&lt;/title&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css&quot; integrity=&quot;sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://use.fontawesome.com/releases/v5.1.0/css/all.css&quot; integrity=&quot;sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;style&gt;
+input[type=&quot;range&quot;] {
+	-webkit-appearance: none;
+	border-radius: .25rem;
+	padding: 0.375rem 0;
+}
+input[type=range]::-moz-range-track {
+	background: transparent;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!-- header --&gt;
+&lt;header&gt;
+  &lt;nav class=&quot;navbar navbar-expand-md navbar-dark bg-dark&quot;&gt;
+	&lt;span class=&quot;navbar-brand&quot;&gt;&lt;/span&gt;
+  &lt;/nav&gt;
+&lt;/header&gt;
+
+&lt;!-- content --&gt;
+&lt;div role=&quot;main&quot; class=&quot;container mt-3&quot;&gt;
+	&lt;form&gt;
+		&lt;div class=&quot;form-group form-inline&quot;&gt;
+			&lt;label class=&quot;col-sm-1 col-form-label&quot;&gt;&lt;i class=&quot;fas fa-power-off&quot; aria-hidden title=&quot;Power&quot;&gt;&lt;/i&gt;&lt;span class=&quot;sr-only&quot;&gt;Power:&lt;/span&gt;&lt;/label&gt;
+			&lt;div class=&quot;col-sm-11&quot;&gt;
+				&lt;div class=&quot;btn-group btn-group-toggle d-flex&quot; data-toggle=&quot;buttons&quot;&gt;
+					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
+						&lt;input type=&quot;radio&quot; name=&quot;state&quot; id=&quot;stateon&quot; autocomplete=&quot;off&quot; value=&quot;ON&quot;&gt;ON
+					&lt;/label&gt;
+					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
+						&lt;input type=&quot;radio&quot; name=&quot;state&quot; id=&quot;stateoff&quot; autocomplete=&quot;off&quot; value=&quot;OFF&quot;&gt;OFF
+					&lt;/label&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div class=&quot;form-group form-inline&quot;&gt;
+			&lt;label for=&quot;valrange&quot; class=&quot;col-sm-1 col-form-label&quot;&gt;&lt;i class=&quot;fas fa-sun&quot; aria-hidden title=&quot;Brightness&quot;&gt;&lt;/i&gt;&lt;span class=&quot;sr-only&quot;&gt;Brightness:&lt;/span&gt;&lt;/label&gt;
+			&lt;div class=&quot;col-sm-11&quot;&gt;
+				&lt;input type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;50&quot; class=&quot;form-control-range&quot; id=&quot;valrange&quot; title=&quot;brightness&quot;&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div class=&quot;form-group form-inline&quot;&gt;
+			&lt;label for=&quot;huerange&quot; class=&quot;col-sm-1 col-form-label&quot;&gt;&lt;i class=&quot;fas fa-palette&quot; aria-hidden title=&quot;Color&quot;&gt;&lt;/i&gt;&lt;span class=&quot;sr-only&quot;&gt;Color:&lt;/span&gt;&lt;/label&gt;
+			&lt;div class=&quot;col-sm-11&quot;&gt;
+				&lt;input type=&quot;range&quot; min=&quot;0&quot; max=&quot;359&quot; value=&quot;180&quot; class=&quot;form-control-range&quot; id=&quot;huerange&quot; title=&quot;hue&quot;&gt;
+				&lt;input type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;100&quot; class=&quot;form-control-range mt-2&quot; id=&quot;satrange&quot; title=&quot;saturation&quot;&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+		&lt;div class=&quot;form-group form-inline&quot;&gt;
+			&lt;label class=&quot;col-sm-1 col-form-label&quot;&gt;&lt;i class=&quot;fas fa-magic&quot; aria-hidden title=&quot;Effect&quot;&gt;&lt;/i&gt;&lt;span class=&quot;sr-only&quot;&gt;Effect:&lt;/span&gt;&lt;/label&gt;
+			&lt;div class=&quot;col-sm-11&quot;&gt;
+				&lt;div class=&quot;btn-group btn-group-toggle d-flex&quot; data-toggle=&quot;buttons&quot;&gt;
+					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
+						&lt;input type=&quot;radio&quot; name=&quot;effect&quot; id=&quot;effectnone&quot; autocomplete=&quot;off&quot; value=&quot;none&quot;&gt;none
+					&lt;/label&gt;
+					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
+						&lt;input type=&quot;radio&quot; name=&quot;effect&quot; id=&quot;effectcolorloop&quot; autocomplete=&quot;off&quot; value=&quot;colorloop&quot;&gt;colorloop
+					&lt;/label&gt;
+					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
+						&lt;input type=&quot;radio&quot; name=&quot;effect&quot; id=&quot;effecttrail&quot; autocomplete=&quot;off&quot; value=&quot;trail&quot;&gt;trail
+					&lt;/label&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		&lt;/div&gt;
+	&lt;/form&gt;
+&lt;/div&gt;
+
+&lt;!-- js --&gt;
+&lt;script src=&quot;https://code.jquery.com/jquery-3.3.1.slim.min.js&quot; integrity=&quot;sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js&quot; integrity=&quot;sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js&quot; integrity=&quot;sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+// https://codeburst.io/throttling-and-debouncing-in-javascript-b01cad5c8edf
+const throttle = (func, limit) =&gt; {
+  let lastFunc
+  let lastRan
+  return function() {
+    const context = this
+    const args = arguments
+    if (!lastRan) {
+      func.apply(context, args)
+      lastRan = Date.now()
+    } else {
+      clearTimeout(lastFunc)
+      lastFunc = setTimeout(function() {
+        if ((Date.now() - lastRan) &gt;= limit) {
+          func.apply(context, args)
+          lastRan = Date.now()
+        }
+      }, limit - (Date.now() - lastRan))
+    }
+  }
+}
+
+var huerange = document.getElementById(&quot;huerange&quot;);
+var satrange = document.getElementById(&quot;satrange&quot;);
+var valrange = document.getElementById(&quot;valrange&quot;);
+
+function updateBackground() {
+	var hue = huerange.value;
+	satrange.style.background = &quot;linear-gradient(to right,#FFF,hsl(&quot; + hue + &quot;,100%,50%))&quot;;
+	var sat = satrange.value;
+	valrange.style.background = &quot;linear-gradient(to right,#000,hsl(&quot; + hue + &quot;,100%,&quot; + (100 - sat/2) + &quot;%))&quot;;
+}
+
+function changeColor() {
+	sendState({
+		&quot;brightness&quot; : valrange.value,
+		&quot;color&quot; : {
+			&quot;h&quot;: huerange.value,
+			&quot;s&quot; : satrange.value
+		}
+	});
+}
+
+huerange.addEventListener(&quot;input&quot;, updateBackground);
+satrange.addEventListener(&quot;input&quot;, updateBackground);
+var throttledChangeColor = throttle(changeColor, 500);
+huerange.addEventListener(&quot;input&quot;, throttledChangeColor);
+satrange.addEventListener(&quot;input&quot;, throttledChangeColor);
+valrange.addEventListener(&quot;input&quot;, throttledChangeColor);
+
+var huerangeBackground = &quot;linear-gradient(to right&quot;;
+for (var i =0; i &lt;= 359; i++) {
+	huerangeBackground += &quot;,hsl(&quot; + i + &quot;,100%,50%)&quot;;
+}
+huerangeBackground += &quot;)&quot;;
+huerange.style.background = huerangeBackground;
+
+updateBackground();
+
+$('input[type=radio][name=state]').change(function() {
+	sendState({&quot;state&quot;:this.value});
+});
+
+$('input[type=radio][name=effect]').change(function() {
+	sendState({&quot;effect&quot;:this.value});
+});
+
+function updateRadio(name, value) {
+	var inputs = document.getElementsByName(name);
+	for (let input of inputs) {
+		if (input.value === value) {
+			input.checked = true;
+			input.parentElement.classList.add("active");
+		} else {
+			input.parentElement.classList.remove("active");
+		}
+	}
+}
+
+function handleStateObject(stateObj) {
+	console.log(stateObj);
+	$('.navbar-brand').text(stateObj.id);
+	$('title').text(stateObj.id);
+	updateRadio("state", stateObj.state);
+	updateRadio("effect", stateObj.effect);
+	var color = stateObj.color;
+	huerange.value = color.h;
+	satrange.value = color.s;
+	valrange.value = stateObj.brightness;
+	updateBackground();
+}
+
+function sendState(stateObj) {
+	console.log(&quot;sending state &quot;, stateObj);
+	var json = JSON.stringify(stateObj);
+
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.open(&quot;PUT&quot;, &quot;light&quot;);
+	xmlHttp.setRequestHeader('Content-Type', 'application/json');
+	xmlHttp.send(json);
+}
+
+(function loadConfig() {
+	var xmlHttp = new XMLHttpRequest();
+	xmlHttp.onreadystatechange = function() {
+		if(xmlHttp.readyState === XMLHttpRequest.DONE &amp;&amp; xmlHttp.status === 200) {
+			handleStateObject(xmlHttp.response);
+		}
+	}
+	xmlHttp.open(&quot;GET&quot;, &quot;light&quot;);
+	xmlHttp.responseType = &quot;json&quot;;
+	xmlHttp.send();
+})();
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+				</section>
+
+				<section id="new-index-html">
+					<!-- TODO screenshot of new and improved index.html -->
+				</section>
+
+				<section id="lamp-assembly">
+					<h2>Lamp Assembly</h2>
+					<p>Now that we know that the LEDs are working as expected, it is time to start putting our lamp together.</p>
+				</section>
+
+				<section id="tvars-remove-socket">
+				</section>
+
+				<section id="tube-cut">
+					<!-- TODO add link to cut guide PDF -->
+					<p>Using the cut guide, cut 3 slits up the cardboard tube</p>
+					<!-- TODO add photo -->
+				</section>
+
+				<section id="led-wrap">
+					<!-- TODO photos/instructions on wrapping led around tube -->
+				</section>
+
+				<section id="3d-printed-tube">
+					<h2>Shameless Plug</h2>
+					<!-- TODO shameless plug for my own 3d printed design -->
+				</section>
+
+				<section id="colorloop">
+					<h2>Effect: colorloop</h2>
+				</section>
+
+				<section id="rainbow">
+					<h2>Effect: rainbow</h2>
+				</section>
+
+				<section id="remote-access">
+					<h2>Remote Access</h2>
+					<p>So far, we've been accessing our webserver while connected to the same network. In order to access this page remotely, there are a few options:</p>
+					<ul>
+						<li>VPN client/server</li>
+						<li>SSH tunneling</li>
+						<li>port forwarding (don't do this)</li>
+					</ul>
+				</section>
+
+				<section id="port-forwarding">
+					<h2>Port Forwarding</h2>
+					<p>Port forwarding is the easiest way to allow integration with third party services since they would need to be able to hit your web server from outside of your network.</p>
+					<p>However, exposing an unprotected webserver to the open internet will put the device and its network at unnecessary risk ☠️.</p>
+				</section>
+
+				<section id="mqtt">
+					<h2><abbr title="Message Queuing Telemetry Transport">MQTT</abbr></h2>
+					<blockquote cite="http://mqtt.org/faq">... a publish/subscribe, extremely simple and lightweight messaging protocol, designed for constrained devices and low-bandwidth, high-latency or unreliable networks. The design principles are to minimise network bandwidth and device resource requirements ...</blockquote>
+				</section>
+
+				<section id="mqtt-diagram">
+					<img src="images/mqtt.png"/>
+					<p><small><a href="https://www.appcelerator.com/blog/2018/03/api-builder-and-mqtt-for-iot-part-1/">https://www.appcelerator.com/blog/2018/03/api-builder-and-mqtt-for-iot-part-1/</a></small></p>
+				</section>
+
+				<section>Adafruit IO</section>
+
+				<section id="websockets">
+					<p>WebSockets can provide a low-latency communication channel which can broadcast changes to all connected clients</p>
+					<!-- TODO more on this -->
+				</section>
+
+				<section id="trail">
+					<h2>Effect: trail</h2>
+					<p>This effect makes use of the addressable nature of the WS2812B. Up until this point, all FastLED operations had been applied to the entire strip. However, this one has varying brightness of LEDs at the same time.</p>
+					<!-- TODO include animated gif of trail effect -->
+				</section>
+
+				<section id="why-tvars">
+					<h2>Next Steps: Other Lamp Enclosures</h2>
+					<p>The <a href="https://www.ikea.com/us/en/catalog/products/60356144/">TVÄRS lamp</a> was chosen as the base due to its low cost ($4 USD) and ease of modding, allowing us to focus on the electronics and software. The same electronics components can be used in almost any lamp or enclosure you can imagine, whether they are premade like the TVÄRS, handmade, 3D printed, or laser cut.
+				</section>
+
+				<section id="example-enclosures">
+					<ul>
+						<li><a href="https://www.thingiverse.com/thing:912315">Alien Cube</a></li>
+					</ul>
+				</section>
+
+				<section id="more-leds">
+					<h2>Next Steps: More LEDs</h2>
+					<ul>
+						<li>Get a longer strip or extend your existing strip</li>
+						<li>Get a larger 5V power supply to meet the current demand</li>
+						<li>Rewire to bypass the D1 mini's fuse</li>
+					</ul>
+				</section>
+
+				<section id="d1-mini-fuse">
+					<p>The D1 mini has a 500 mA fuse that limits the current that the 5V pin can supply</p>
+					<p class="stretch"><img src="images/d1minifuse.png"/></p>
+					<p><small><a href="https://wiki.wemos.cc/_media/products:d1:sch_d1_mini_v3.0.0.pdf">https://wiki.wemos.cc/_media/products:d1:sch_d1_mini_v3.0.0.pdf</a></small></p>
+				</section>
+
+				<section>
+					<!-- TODO new wiring (fritzing?) diagram -->
+				</section>
+
+				<section id="other-project-ideas">
+					<h2>Next Steps: Other Project Ideas</h2>
+					<ul>
+						<li>notification light: blink or change color on events (e.g., new email/tweets, stock alerts)</li>
+						<li>audio visualization: add a microphone for sound/music reactive lighting</li>
+						<li>nightlight: add a <a href="https://en.wikipedia.org/wiki/Photoresistor">photoresistor</a> to automatically adjust brightness</li>
+						<li>clock: synch with NTP and gradually fade from one color to another over each hour</li>
+						<li>long distance friendship lamps</li>
+					</ul>
+				</section>
 			</div>
 		</div>
 
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.3/clipboard.min.js" integrity="sha256-UYhIvf9FwUwooWcWL/SYFVJrjf6MFRzFkecTM4WPb3o=" crossorigin="anonymous"></script>
 
 		<script>
 			// More info about config & dependencies:
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
 			Reveal.initialize({
+				history: true,
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
+			});
+
+			/**
+			 * clipboard and tooltips
+			 */
+			const cls = ["tooltipped", "tooltipped-n", "tooltipped-no-delay"];
+			function clearTooltip(e) {
+				e.currentTarget.classList.remove(...cls);
+				e.currentTarget.removeAttribute('aria-label');
+			}
+			var copyElements = document.querySelectorAll(".copy");
+			for (let copyElement of copyElements) {
+				var node = document.createElement("span");
+				node.className = "copybutton";
+				var textnode = document.createTextNode("📋");
+				node.addEventListener('mouseleave',clearTooltip);
+				node.addEventListener('blur',clearTooltip);
+				node.appendChild(textnode);
+				copyElement.parentElement.appendChild(node);
+			}
+			var clipboard = new ClipboardJS('.copybutton', {
+				target: function(trigger) {
+					return trigger.previousElementSibling;
+				}
+			});
+			clipboard.on('success', function(e) {
+				e.trigger.classList.add(...cls);
+				e.trigger.setAttribute("aria-label", "Copied!")
+				e.clearSelection();
 			});
 		</script>
 	</body>
