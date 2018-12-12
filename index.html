@@ -219,10 +219,11 @@ void loop() {
 				<section id="hello-world">
 					<h2>Software Hello World</h2>
 					<ul>
+						<li>Set the baud rate on the Serial Monitor to match the above <code>Serial.begin()</code> call (115200)</li>
 						<li>Add the following to the beginning of the <code>setup()</code> function:</li>
 						<pre><code class="cpp copy">  Serial.begin(115200);
+  Serial.println("");
   Serial.println("Hello, World!");</code></pre></li>
-						<li>Set the baud rate on the Serial Monitor to match the above <code>Serial.begin()</code> call (115200)</li>
 						<li>Re-upload the program; you should be able to see "Hello, World!" printed in the Serial Monitor window</li>
 					</ul>
 				</section>
@@ -236,7 +237,7 @@ void loop() {
 						<li>Some strips are weather/water proof (<a href="https://en.wikipedia.org/wiki/IP_Code">IP</a> 6X rated) at the cost of a few mm of thickness</li>
 						<li>Arrows indicate the direction of data flow</li>
 						<li>Can be cut along the copper pads</li>
-						<li>Adhesive backing</li>
+						<li>Adhesive backing (usually terrible)</li>
 					</ul>
 				</section>
 
@@ -275,7 +276,8 @@ void loop() {
 				</section>
 
 				<section id="wiring-photo">
-					<!-- TODO wiring photo goes here -->
+					<p class="stretch"><img src="images/wired.jpg"/></p>
+					<p><small>using an LED strip connector</small></p>
 				</section>
 
 				<section id="level-shifting">
@@ -371,13 +373,13 @@ unsigned int hue = 180;   // hue state (0-359)
 uint8_t saturation = 100; // saturation state (0-100)
 uint8_t value = 50;       // value/brightness state (0-100)
 boolean state = true;     // on/off state (true = "ON", false = "OFF")
-char effect[10] = "none"; // "none" | "colorloop" | "trail" | "rainbow"
+char effect[10] = "none"; // "none" | "colorloop" | "trail"
 const char* on_state = "ON";
 const char* off_state = "OFF";</code></pre>
 				</section>
 
 				<section id="show-current-color-2">
-					<p>Next, add a global variable <code>currentColor</code> under the decalaration for <code>leds</code> near the top:</p>
+					<p>Next, add a global variable <code>currentColor</code> under the declaration for <code>leds</code> near the top:</p>
 					<pre><code class="cpp copy">CRGB leds[NUM_LEDS];
 CHSV currentColor = CHSV(hue * 255 / 359, saturation * 255 / 100, value * 255 / 100);</code></pre>
 				</section>
@@ -399,7 +401,25 @@ void loop_led() {
 				</section>
 
 				<section id="show-current-color-4">
-					<!-- TODO image of it showing the current color -->
+					<p class="stretch"><img src="images/currentcolor.jpg"/></p>
+				</section>
+
+				<section id="show-current-color-5">
+					<h2>Changing the Color</h2>
+					<p>Try setting the <code>hue</code> variable near the top to <code>0</code>.</p>
+					<pre><code class="cpp copy">unsigned int hue = 0;   // hue state (0-359)</code></pre>
+					<div class="fragment">
+						<p>What about lowering the <code>value</code> variable to 25?</p>
+						<pre><code class="cpp copy">uint8_t value = 25;       // value/brightness state (0-100)</code></pre>
+					</div>
+					<div class="fragment">
+						<p>Color changes made during compile time work, but run time changes are preferred.</p>
+					</div>
+				</section>
+
+				<section id="save">
+					<h2>💾 Save Your Work 💾</h2>
+					<p>This is a good point to save your sketch. The Blink example which we have based our work on so far is read only, so it will prompt you to save your sketch to a new location when using File > Save.</p>
 				</section>
 
 				<section id="wifi-begin">
@@ -414,7 +434,7 @@ void loop_led() {
 #include &lt;DNSServer.h&gt;
 #include &lt;ESP8266WebServer.h&gt;
 #include &lt;WiFiManager.h&gt;</code></pre>
-					<p><small>some of these libraries are installed as part of the ESP8266 board</small></p>
+					<p><small>(some of these libraries are installed as part of the ESP8266 board)</small></p>
 					<div class="fragment">
 					<p>Next, add a global <code>wifiManager</code> variable above the <code>setup()</code> function:</p>
 					<pre><code class="cpp copy">// WiFi
@@ -447,24 +467,30 @@ void setup() {
   // WiFi
   WiFi.hostname(getIdentifier().c_str());
   wifiManager.autoConnect(getIdentifier().c_str());
+	Serial.printf("WiFi IP Address: %s\n", WiFi.localIP().toString().c_str());
   Serial.printf("WiFi Hostname: %s\n", WiFi.hostname().c_str());
   Serial.printf("WiFi MAC addr: %s\n", WiFi.macAddress().c_str());
   Serial.printf("WiFi SSID: %s\n", WiFi.SSID().c_str());
 }</code></pre>
 				</section>
 
-				<section id="wifimanager-ap">
-					<p>After uploading the code, it's time to tell the D1 mini which network to connect to:</p>
+				<section id="wifimanager">
+					<p>After uploading the code, tell the D1 mini which network to connect to:</p>
 					<ol>
 						<li>In the Serial Monitor, look for a line that indicates the access point name:<pre class="serialmon">*WM: Configuring access point...
 *WM: <mark>LIGHT-ABC123</mark></pre></li>
 						<li>On your phone or laptop, look for an open network that matches (e.g., LIGHT-ABC123) and connect to it.</li>
-						<li>Once connected, you should see a prompt to sign in (e.g., "Tap here to sign in to network").</li>
 					</ol>
 				</section>
 
+				<section id="wifimanager-ap">
+					<p class="stretch"><img src="images/wifimanager1.png"></p>
+					<p><small>Once connected, you should see a prompt to sign in (e.g., "Tap here to sign in to network"). Otherwise, open <a href="http://192.168.4.1">http://192.168.4.1</a> in a browser.</small></p>
+				</section>
+
 				<section id="wifimanager-captiveportal">
-					<!-- TODO screenshot of wifimanager captive portal -->
+					<p class="stretch"><img src="images/wifimanager2.png"> <img src="images/wifimanager3.png"> <img src="images/wifimanager4.png"></p>
+					<p><small>Select your network and provide the credentials</small></p>
 				</section>
 
 				<section id="wifi-connected">
@@ -475,8 +501,9 @@ void setup() {
 *WM: Using last saved values, should be faster
 *WM: Connection result:
 *WM: 3
-<mark>*WM: IP Address:
-*WM: 192.168.1.206</mark>
+*WM: IP Address:
+*WM: 192.168.1.206
+<mark>WiFi IP Address: 192.168.1.206</mark>
 WiFi Hostname: LIGHT-ABC123</pre>
 				</section>
 
@@ -520,7 +547,7 @@ ESP8266WebServer server(HTTP_SERVER_PORT);</code></pre>
 				</section>
 
 				<section id="http-server-setup">
-					<p>Next, add the following to the <code>setup()</code> function, after the "WiFi" section:</p>
+					<p>Next, add the following to the end of the <code>setup()</code> function, after the "WiFi" section:</p>
 					<pre><code class="cpp copy">  // HTTP server
   server.on("/hello", HTTP_GET, []() {
     server.send(200, "text/plain", "Hello, World!");
@@ -530,7 +557,7 @@ ESP8266WebServer server(HTTP_SERVER_PORT);</code></pre>
   });
   server.on("/light", HTTP_PUT, []() {
     if (!server.hasArg("plain")) {
-      server.send(400, "text/plain", "no body");
+      server.send(400, "text/plain", "missing body on request");
       return;
     }
 
@@ -550,18 +577,20 @@ ESP8266WebServer server(HTTP_SERVER_PORT);</code></pre>
 				</section>
 
 				<section id="get-state-json">
-					<p>Add the <code>getStateJson()</code> function at the very bottom of the sketch:</p>
+					<p>Add the <code>getStateJson()</code> function before the <code>setup()</code> function:</p>
 					<pre><code class="cpp copy">/**
    return a JSON string representation of the current state
 */
-String getStateJson() {
+String getStateJson(bool save = false) {
   // code partially generated using https://arduinojson.org/v5/assistant/
   const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(5);
   DynamicJsonBuffer jsonBuffer(bufferSize);
   JsonObject& root = jsonBuffer.createObject();
-  root["id"] = getIdentifier(); // not really part of the state, but doesn't hurt to include it
+  if (!save) {
+    root["id"] = getIdentifier();
+  }
   root["brightness"] = value;
-  root["state"] = state ? "ON" : "OFF";
+  root["state"] = state ? on_state : off_state;
   root["effect"] = effect;
   JsonObject& color = root.createNestedObject("color");
   color["h"] = hue;
@@ -608,7 +637,7 @@ String getStateJson() {
 						<p>You should see the JSON that was the "data" parameter printed out in the Serial Monitor...</p>
 						<pre class="serialmon">{"brightness":100}</pre>
 					</div>
-					<p class="fragment">We should probably go back and finish that <code>handleJsonPayload()</code> function, huh?</p>
+					<p class="fragment">Now that we have confirmed that <code>handleJsonPayload()</code> is working, let's actually implement it to affect our state variables.</p>
 				</section>
 
 				<section id="handle-json-payload">
@@ -655,7 +684,7 @@ void setColor(CHSV toChsv) {
   returns true if the given effect string is non-empty, one of the valid effect values, and different from the current state's effect; false otherwise
 */
 bool isValidAndDifferentEffect(const char *ef) {
-  return ef && (strcmp(ef, "none") == 0 || strcmp(ef, "colorloop") == 0 || strcmp(ef, "trail") == 0 || strcmp(ef, "rainbow") == 0) && strcmp(ef, effect) != 0;
+  return ef && (strcmp(ef, "none") == 0 || strcmp(ef, "colorloop") == 0 || strcmp(ef, "trail") == 0) && strcmp(ef, effect) != 0;
 }
 
 /**
@@ -709,7 +738,7 @@ void handleJsonPayload(const char* payload) {
 
 				<section id="curl-put2">
 					<h2>Max Brightness</h2>
-					<p>Upload the code and try that same max brightness PUT request again:</p>
+					<p>Upload the sketch and try that same max brightness PUT request again:</p>
 					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"brightness\":100}" http://192.168.1.206/light</code></pre>
 					<p class="fragment" style="font-size:100px;">😎</p>
 				</section>
@@ -722,13 +751,13 @@ void handleJsonPayload(const char* payload) {
 					<p><small><q>just gimme the light</q> <span class="fragment">- Sean Paul</span></small></p>
 					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"color\":{\"h\":0,\"s\":100},\"brightness\":50}" http://192.168.1.206/light</code></pre>
 					<p><small><q>(Roxanne) put on the red light</q> <span class="fragment">- The Police</span></small></p>
-					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"color\":{\"s\":0},\"brightness\":100}" http://192.168.1.206/light</code></pre>
+					<pre><code class="shell copy">curl -X PUT -H "Content-Type:application/json" -d "{\"color\":{\"s\":0},\"brightness\":50}" http://192.168.1.206/light</code></pre>
 					<p><small><q>all of the lights, all of the lights</q> <span class="fragment">- Ye</span></small></p>
 				</section>
 
 				<section id="webpage">
 					<h2>Time To Build A Webpage</h2>
-					<p>Command line tools are fun and all, but ideally there would be a more user-friendly way of interacting with our server using a browser.</p>
+					<p>The <code>curl</code> command line tool has successfully demonstrated remote control of our LEDs. However, we probably want a more user-friendly way of interacting with our server using a browser.</p>
 					<!-- TODO screenshot of webpage -->
 				</section>
 
@@ -777,7 +806,7 @@ Hello, World!
 				</section>
 
 				<section id="serve-static">
-					<p>Now we need to make changes to the sketch to serve up the file on certain requests:</p>
+					<p>Changes to serve up the file on requests to "/":</p>
 					<ul>
 						<li>
 							<p>Add the following include:</p>
@@ -787,16 +816,20 @@ Hello, World!
 							<p>Add the following line in the <code>setup()</code> function before the calls to <code>server.on()</code>:</p>
 							<pre><code class="cpp copy">  server.serveStatic("/", SPIFFS, "/index.html"); // handle root requests</code></pre>
 						</li>
+						<li>
+							<p>Add the following to the beginning of the <code>setup()</code> function:</p>
+							<pre><code class="cpp copy">  SPIFFS.begin();</code></pre>
+						</li>
 					</ul>
 				</section>
 
 				<section id="test-html">
-					<p>You should now be able to view the webpage on a browser:</p>
+					<p>After uploading, you should now be able to view the webpage on a browser:</p>
 					<img src="images/helloworld-webpage.png"/>
 				</section>
 
 				<section id="real-html">
-					<p>Now let's modify <code>index.html</code> to have something more useful and re-upload:</p>
+					<p>Now let's modify <code>index.html</code> to have something more useful and re-upload (Tools > ESP8266 Sketch Data Upload):</p>
 					<pre><code class="html copy">&lt;!DOCTYPE html&gt;
 &lt;html lange=&quot;en&quot;&gt;
 &lt;head&gt;
@@ -804,7 +837,7 @@ Hello, World!
 &lt;title&gt;&lt;/title&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1, shrink-to-fit=no&quot;&gt;
 &lt;link rel=&quot;stylesheet&quot; href=&quot;https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css&quot; integrity=&quot;sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO&quot; crossorigin=&quot;anonymous&quot;&gt;
-&lt;link rel=&quot;stylesheet&quot; href=&quot;https://use.fontawesome.com/releases/v5.1.0/css/all.css&quot; integrity=&quot;sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt&quot; crossorigin=&quot;anonymous&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://use.fontawesome.com/releases/v5.5.0/css/all.css&quot; integrity=&quot;sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU&quot; crossorigin=&quot;anonymous&quot;&gt;
 &lt;style&gt;
 input[type=&quot;range&quot;] {
 	-webkit-appearance: none;
@@ -832,10 +865,10 @@ input[type=range]::-moz-range-track {
 			&lt;div class=&quot;col-sm-11&quot;&gt;
 				&lt;div class=&quot;btn-group btn-group-toggle d-flex&quot; data-toggle=&quot;buttons&quot;&gt;
 					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
-						&lt;input type=&quot;radio&quot; name=&quot;state&quot; id=&quot;stateon&quot; autocomplete=&quot;off&quot; value=&quot;ON&quot;&gt;ON
+						&lt;input type=&quot;radio&quot; name=&quot;state&quot; autocomplete=&quot;off&quot; value=&quot;ON&quot;&gt;ON
 					&lt;/label&gt;
 					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
-						&lt;input type=&quot;radio&quot; name=&quot;state&quot; id=&quot;stateoff&quot; autocomplete=&quot;off&quot; value=&quot;OFF&quot;&gt;OFF
+						&lt;input type=&quot;radio&quot; name=&quot;state&quot; autocomplete=&quot;off&quot; value=&quot;OFF&quot;&gt;OFF
 					&lt;/label&gt;
 				&lt;/div&gt;
 			&lt;/div&gt;
@@ -858,13 +891,13 @@ input[type=range]::-moz-range-track {
 			&lt;div class=&quot;col-sm-11&quot;&gt;
 				&lt;div class=&quot;btn-group btn-group-toggle d-flex&quot; data-toggle=&quot;buttons&quot;&gt;
 					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
-						&lt;input type=&quot;radio&quot; name=&quot;effect&quot; id=&quot;effectnone&quot; autocomplete=&quot;off&quot; value=&quot;none&quot;&gt;none
+						&lt;input type=&quot;radio&quot; name=&quot;effect&quot; autocomplete=&quot;off&quot; value=&quot;none&quot;&gt;none
 					&lt;/label&gt;
 					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
-						&lt;input type=&quot;radio&quot; name=&quot;effect&quot; id=&quot;effectcolorloop&quot; autocomplete=&quot;off&quot; value=&quot;colorloop&quot;&gt;colorloop
+						&lt;input type=&quot;radio&quot; name=&quot;effect&quot; autocomplete=&quot;off&quot; value=&quot;colorloop&quot;&gt;colorloop
 					&lt;/label&gt;
 					&lt;label class=&quot;btn btn-primary w-100&quot;&gt;
-						&lt;input type=&quot;radio&quot; name=&quot;effect&quot; id=&quot;effecttrail&quot; autocomplete=&quot;off&quot; value=&quot;trail&quot;&gt;trail
+						&lt;input type=&quot;radio&quot; name=&quot;effect&quot; autocomplete=&quot;off&quot; value=&quot;trail&quot;&gt;trail
 					&lt;/label&gt;
 				&lt;/div&gt;
 			&lt;/div&gt;
@@ -996,7 +1029,217 @@ function sendState(stateObj) {
 				</section>
 
 				<section id="new-index-html">
-					<!-- TODO screenshot of new and improved index.html -->
+					<p class="stretch"><img src="images/newindexhtml.png"/></p>
+				</section>
+
+				<section id="remote-access">
+					<h2>Remote Access</h2>
+					<p>So far, we've been accessing our webserver while connected to the same network. In order to access this page remotely, there are a few options:</p>
+					<ul>
+						<li>VPN client/server</li>
+						<li>SSH tunneling</li>
+						<li>port forwarding (don't do this)</li>
+					</ul>
+				</section>
+
+				<section id="port-forwarding">
+					<h2>Port Forwarding</h2>
+					<p>Port forwarding is the easiest way to allow integration with third party services since they would need to be able to hit your web server from outside of your network.</p>
+					<p>However, exposing an unprotected webserver to the open internet will put the device and its network at unnecessary risk ☠️. Don't do it!</p>
+				</section>
+
+				<section id="mqtt">
+					<h2><abbr title="Message Queuing Telemetry Transport">MQTT</abbr></h2>
+					<blockquote cite="http://mqtt.org/faq">... a publish/subscribe, extremely simple and lightweight messaging protocol, designed for constrained devices and low-bandwidth, high-latency or unreliable networks. The design principles are to minimise network bandwidth and device resource requirements ...</blockquote>
+				</section>
+
+				<section id="mqtt-diagram">
+					<img src="images/mqtt.png"/>
+					<p><small>📷: <a href="https://www.appcelerator.com/blog/2018/03/api-builder-and-mqtt-for-iot-part-1/">https://www.appcelerator.com/blog/2018/03/api-builder-and-mqtt-for-iot-part-1/</a></small></p>
+				</section>
+
+				<section id="adafruit-io">
+					<h2>Adafruit IO</h2>
+					<p><a href="https://io.adafruit.com">Adafruit IO</a> meets all of the criteria that I was looking for in a MQTT broker:</p>
+					<ul>
+						<li>cloud service platform</li>
+						<li>MQTT API</li>
+						<li>REST API</li>
+						<li>free tier available</li>
+						<li><a href="https://ifttt.com">IFTTT</a> integration</li>
+					</ul>
+				</section>
+
+				<section id="aio-create-feeds">
+					<h2>Create Feeds</h2>
+					<p class="stretch"><img src="images/io.adafruit.com_createfeed.png"/></p>
+					<p><small>Feeds &gt; Actions &gt; Create a New Feed</small></p>
+				</section>
+
+				<section id="aio-create-feeds2">
+					<p>Create a feed named "light-set"</p>
+					<p class="stretch"><img src="images/io.adafruit.com_feedscreated.png"/></p>
+				</section>
+
+				<section id="aio-key">
+					<p>Click on "View AIO Key" on the left and make note of the username and key value</p>
+					<p class="stretch"><img src="images/io.adafruit.com_key.png"/></p>
+					<p><small>don't worry, I've since regenerated my key 😜</small></p>
+				</section>
+
+				<section id="pubsubclient">
+					<h2>PubSubClient</h2>
+					<ul>
+						<li>Install the <a href="https://pubsubclient.knolleary.net/">PubSubClient</a> library (by Nick O'Leary) using the Library Manager</li>
+						<li>Add the PubSubClient include to the top:<pre><code class="cpp copy">#include &lt;PubSubClient.h&gt;</code></pre></li>
+					</ul>
+				</section>
+
+				<section id="pubsubclient-global">
+					<p>Add the following below the "HTTP server" global variables section, substituting your username and AIO key values:</p>
+					<pre><code class="cpp copy">// MQTT
+#define MQTT_PORT 8883 // usually 1883 or 8883 (MQTT over TLS/SSL)
+#define MQTT_SERVER "io.adafruit.com"
+#define MQTT_USER "lampdemo"
+#define MQTT_PASSWORD "b8752aa437694418b41d43f2da4dbe69"
+#define MQTT_COMMAND_TOPIC "lampdemo/feeds/light-set" // topic for making changes to the current state
+WiFiClientSecure wiFiClient;
+unsigned long lastConnectAttempt = 0;
+PubSubClient pubSubClient(wiFiClient);</code></pre>
+				</section>
+
+				<section id="pubsubclient-setup">
+					<p>Add the following to the <code>setup()</code> function, below the "HTTP server" section:</p>
+					<pre><code class="cpp copy">  // MQTT
+  pubSubClient.setServer(MQTT_SERVER, MQTT_PORT);
+  pubSubClient.setCallback(mqttCallback);</code></pre>
+					<p>Add the following the the <code>loop()</code> function, below the "HTTP" section:</p>
+					<pre><code class="cpp copy">  // MQTT
+  loop_mqtt();</code></pre>
+				</section>
+
+				<section id="pubsubclient-functions">
+					<p>Add the following functions to the bottom of the sketch and upload your sketch again</p>
+					<pre><code class="cpp copy">void loop_mqtt() {
+  if (!pubSubClient.connected()) {
+    unsigned long now = millis();
+    if (now - lastConnectAttempt > 5000) {
+      lastConnectAttempt = now;
+      // Attempt to connect
+      if (connectPubSub()) {
+        lastConnectAttempt = 0;
+      }
+    }
+  } else {
+    // Client connected
+    pubSubClient.loop();
+  }
+}
+
+/**
+   returns true if the MQTT connection attempt was successful; false otherwise
+*/
+boolean connectPubSub() {
+  Serial.println("attempting MQTT connect");
+  if (pubSubClient.connect(getIdentifier().c_str(), MQTT_USER, MQTT_PASSWORD)) {
+    Serial.printf("MQTT connection established to %s:%d\n", MQTT_SERVER, MQTT_PORT);
+    pubSubClient.subscribe(MQTT_COMMAND_TOPIC);
+  }
+  return pubSubClient.connected();
+}
+
+/**
+  handle incoming MQTT message
+*/
+void mqttCallback(char* topic, byte* payload, unsigned int length) {
+  Serial.printf("MQTT message arrived [%s]: ", topic);
+  Serial.write(payload, length);
+  Serial.println();
+
+  if (strcmp(topic, MQTT_COMMAND_TOPIC) == 0) { // we only care about messages from the command topic
+    handleJsonPayload((const char*) payload);
+  }
+}</code></pre>
+				</section>
+
+				<section id="aio-adddata">
+					<h2>Add Data to the Feed</h2>
+					<p>Add some data to change the color:<pre><code class="json copy">{"color":{"h":180}}</code></pre></p>
+					<p class="stretch"><img src="images/io.adafruit.com_adddata.png"/></p>
+					<p><small>Feeds &gt; light-set &gt; Actions &gt; Add Data</small></p>
+				</section>
+
+				<section id="ifttt" data-background-image="images/ifttt.png" data-background-opacity=".2">
+					<h2>IFTTT</h2>
+					<p><a href="https://ifttt.com">IFTTT</a> stands for "if this, then that". It is a service that connects other services together based on rules/events that you define called applets. We will use it to connect Google Assistant and Alexa to Adafruit IO.</p>
+				</section>
+
+				<section id="ifttt-aio">
+					<h2>Connect to Adafruit IO</h2>
+					<p>Go to <a href="https://ifttt.com/adafruit">https://ifttt.com/adafruit</a> to connect IFTTT to Adafruit IO</p>
+					<p class="stretch"><img src="images/ifttt.com_adafruit.png"/></p>
+				</section>
+
+				<section id="ifttt-aio-authorize">
+					<p>After clicking on Connect, you will see a screen asking you to authorize access to AIO</p>
+					<p class="stretch"><img src="images/adafruit_authorize_ifttt.png"/></p>
+				</section>
+
+				<section id="ifttt-assistant">
+					<h2>Connect to Google Assistant</h2>
+					<p>Go to <a href="https://ifttt.com/google_assistant">https://ifttt.com/google_assistant</a> to connect IFTTT to Google Assistant</p>
+					<p class="stretch"><img src="images/ifttt.com_assistant.png"/></p>
+				</section>
+
+				<section id="ifttt-alexa">
+					<h2>Connect to Alexa</h2>
+					<p>Go to <a href="https://ifttt.com/amazon_alexa">https://ifttt.com/amazon_alexa</a> to connect IFTTT to Amazon Alexa</p>
+					<p class="stretch"><img src="images/ifttt.com_alexa.png"/></p>
+				</section>
+
+				<section id="ifttt-create-applet">
+					<h2>Create an Applet</h2>
+					<p>My Applets &gt; New Applet</p>
+					<p class="stretch"><img src="images/ifttt.com_newapplet.png"/></p>
+				</section>
+
+				<section id="ifttt-thisassistant">
+					<h2>this</h2>
+					<p>For the "this" part of the applet, we will select the Google Assistant service</p>
+					<p class="stretch"><img src="images/ifttt.com_newapplet1.png"/></p>
+				</section>
+
+				<section id="ifttt-assistant-trigger">
+					<p>Choose the "Say a phrase with a number" trigger</p>
+					<p class="stretch"><img src="images/ifttt.com_newapplet2.png"/></p>
+				</section>
+
+				<section id="ifttt-assistant-form">
+					<p>Fill out the form like so and click "Create trigger":</p>
+					<p class="stretch"><img src="images/ifttt.com_phrase.png"/></p>
+				</section>
+
+				<section id="ifttt-this-done">
+					<p class="stretch"><img src="images/ifttt.com_thisdone.png"/></p>
+				</section>
+
+				<section id="ifttt-thataio">
+					<h2>that</h2>
+					<p>For the "that" part of the applet, we will select Adafruit</p>
+					<p class="stretch"><img src="images/ifttt.com_newapplet3.png"/></p>
+				</section>
+
+				<section id="ifttt-aio-choose-action">
+					<p class="stretch"><img src="images/ifttt.com_newapplet4.png"/></p>
+				</section>
+
+				<section id="ifttt-aio-send-data">
+					<p>Fill out the form like so and click "Create action":</p>
+					<p class="stretch"><img src="images/ifttt.com_newapplet5.png"/></p>
+				</section>
+
+				<section id="ifttt-review">
+					<p class="stretch"><img src="images/ifttt.com_newapplet6.png"/></p>
 				</section>
 
 				<section id="lamp-assembly">
@@ -1025,38 +1268,6 @@ function sendState(stateObj) {
 				<section id="colorloop">
 					<h2>Effect: colorloop</h2>
 				</section>
-
-				<section id="rainbow">
-					<h2>Effect: rainbow</h2>
-				</section>
-
-				<section id="remote-access">
-					<h2>Remote Access</h2>
-					<p>So far, we've been accessing our webserver while connected to the same network. In order to access this page remotely, there are a few options:</p>
-					<ul>
-						<li>VPN client/server</li>
-						<li>SSH tunneling</li>
-						<li>port forwarding (don't do this)</li>
-					</ul>
-				</section>
-
-				<section id="port-forwarding">
-					<h2>Port Forwarding</h2>
-					<p>Port forwarding is the easiest way to allow integration with third party services since they would need to be able to hit your web server from outside of your network.</p>
-					<p>However, exposing an unprotected webserver to the open internet will put the device and its network at unnecessary risk ☠️.</p>
-				</section>
-
-				<section id="mqtt">
-					<h2><abbr title="Message Queuing Telemetry Transport">MQTT</abbr></h2>
-					<blockquote cite="http://mqtt.org/faq">... a publish/subscribe, extremely simple and lightweight messaging protocol, designed for constrained devices and low-bandwidth, high-latency or unreliable networks. The design principles are to minimise network bandwidth and device resource requirements ...</blockquote>
-				</section>
-
-				<section id="mqtt-diagram">
-					<img src="images/mqtt.png"/>
-					<p><small><a href="https://www.appcelerator.com/blog/2018/03/api-builder-and-mqtt-for-iot-part-1/">https://www.appcelerator.com/blog/2018/03/api-builder-and-mqtt-for-iot-part-1/</a></small></p>
-				</section>
-
-				<section>Adafruit IO</section>
 
 				<section id="websockets">
 					<p>WebSockets can provide a low-latency communication channel which can broadcast changes to all connected clients</p>
