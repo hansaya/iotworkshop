@@ -589,14 +589,12 @@ ESP8266WebServer server(HTTP_SERVER_PORT);</code></pre>
 					<pre><code class="cpp copy">/**
    return a JSON string representation of the current state
 */
-String getStateJson(bool save = false) {
+String getStateJson() {
   // code partially generated using https://arduinojson.org/v5/assistant/
   const size_t bufferSize = JSON_OBJECT_SIZE(2) + JSON_OBJECT_SIZE(5);
   DynamicJsonBuffer jsonBuffer(bufferSize);
   JsonObject& root = jsonBuffer.createObject();
-  if (!save) {
-    root["id"] = getIdentifier();
-  }
+  root["id"] = getIdentifier();
   root["brightness"] = value;
   root["state"] = state ? on_state : off_state;
   root["effect"] = effect;
