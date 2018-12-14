@@ -54,7 +54,7 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section id="title">
+				<section id="title" data-background-image="images/lamp.jpg" data-background-opacity=".1">
 					<h1>DIY IoT Lamp Workshop</h1>
 					<p>Leonard Lee</p>
 					<p><a href="https://github.com/leoclee"><small><i class="fab fa-github"></i> leoclee</small></a></p>
@@ -67,17 +67,19 @@
 					</blockquote>
 				</section>
 
-				<section id="iot-examples">
-					<h2>Example Things:</h2>
+				<section id="iot-examples" data-background-image="images/network-782707_1280-980x637.png" data-background-opacity=".1">
+					<!-- background image by jeferrb from https://pixabay.com/en/network-iot-internet-of-things-782707/ -->
+					<h2>Things Like These:</h2>
 					<ul>
 						<li>speakers</li>
 						<li>televisions</li>
 						<li>lighting</li>
 						<li>thermostats</li>
 						<li>kitchen appliances</li>
-						<li>cars</li>
+						<li>vehicles/planes</li>
 						<li>fitness equipment</li>
 						<li>vending machines/kiosks</li>
+						<li>switches/outlets</li>
 					</ul>
 				</section>
 
@@ -85,6 +87,7 @@
 					<h2>Why?</h2>
 					<p>Connecting devices to the internet and to each other provide some form of value:</p>
 					<ul>
+						<li>remote access</li>
 						<li>home automation (smart homes)</li>
 						<li>cloud integration</li>
 						<li>real time monitoring/tracking/notification</li>
@@ -102,22 +105,26 @@
 					</ul>
 				</section>
 
+				<section id="the-lamp">
+					<p class="stretch"><img data-src="images/lamp.jpg"/></p>
+				</section>
+
 				<section id="supplies" data-background-image="images/surprise.jpg" data-background-opacity=".1">
 					<h2>Supplies</h2>
 						<ul>
-						<li><a href="https://wiki.wemos.cc/products:d1:d1_mini">WEMOS/LOLIN D1 Mini</a> (or clone)</li>
-						<li><a href="https://www.ikea.com/us/en/catalog/products/60356144/">IKEA TVÄRS table lamp</a></li>
-						<li>5V individually addressable RGB LED strip (SK6812 (mini)/WS2811/WS2812(B)/WS2813/<a href="https://www.adafruit.com/category/168">NeoPixels</a>)</li>
-						<li>micro USB cable</li>
-						<li>5V USB power supply</li>
-						<li>paper towel/toilet paper cardboard tube</li>
-						<li>wires</li>
-					</ul>
+							<li><a href="https://www.ikea.com/us/en/catalog/products/60356144/">IKEA TVÄRS table lamp</a></li>
+							<li><a href="https://wiki.wemos.cc/products:d1:d1_mini">WEMOS/LOLIN D1 Mini</a> (or clone)</li>
+							<li>5V individually addressable RGB LED strip (<a href="https://www.adafruit.com/category/168">NeoPixels</a>/WS2811/WS2812(B)/WS2813/SK6812 (mini))</li>
+							<li>micro USB cable</li>
+							<li>5V USB power supply</li>
+							<li>paper towel/toilet paper cardboard tube</li>
+							<li>wires</li>
+						</ul>
 				</section>
 
 				<section id="esp8266" data-background-image="https://wiki.wemos.cc/_media/products:d1:d1_mini_v3.1.0_1_16x9.jpg" data-background-opacity=".25">
 					<h2>D1 Mini/ESP8266</h2>
-					<p>The D1 Mini is a development board that uses the ESP8266 microcontroller to connect to the internet. It is much more powerful than some of the standard Arduino boards, though it has slightly fewer GPIO pins.</p>
+					<p>The D1 Mini is a development board that uses the ESP8266 microcontroller/<abbr title="system on chip">SoC</abbr> to connect to the internet. It is much more powerful than some of the standard Arduino boards, though it has slightly fewer GPIO pins.</p>
 					<p>Overall, it is a good balance between size, capability, and cost.</p>
 					<!-- TODO stop hotlinking background photo -->
 				</section>
@@ -155,7 +162,7 @@
 						</ol>
 					</section>
 					<section id="win-com-port">
-						<figure><img src="images/device-manager-com-port.png" style="margin:0;"/><figcaption><small>On Windows, open the Device Manager to find the port named USB-SERIAL CH340</small></figcaption></figure>
+						<figure><img data-src="images/device-manager-com-port.png" style="margin:0;"/><figcaption><small>On Windows, open the Device Manager to find the port named USB-SERIAL CH340</small></figcaption></figure>
 					</section>
 				</section>
 
@@ -213,7 +220,7 @@ void loop() {
 				</section>
 
 				<section id="serial-monitor-screenshot">
-					<img src="images/serialmonitor.png"/>
+					<img data-src="images/serialmonitor.png"/>
 				</section>
 
 				<section id="hello-world">
@@ -229,7 +236,7 @@ void loop() {
 				</section>
 
 				<section id="led-strip" data-background-video="https://cdn-shop.adafruit.com/product-videos/1200x900/2969-04.mp4" data-background-video-loop="loop" data-background-opacity=".5" data-background-video-muted="true">
-					<h2>WS281X/NeoPixel LED Strips</h2>
+					<h2>WS2812B/NeoPixel LED Strips</h2>
 					<ul>
 						<li>Individually addressable: each LED can be a different color/brightness at the same time</li>
 						<li>Run on 5V DC, same as what is provided by USB</li>
@@ -272,12 +279,12 @@ void loop() {
 				<section id="wiring-diagram">
 					<h2>Wiring Diagram</h2>
 					<p><small>⚠️ Your LED strip's connection leads may not be in the same order! Check the labels! ⚠️</small></p>
-					<img src="images/fritzing.png"/>
+					<img data-src="images/fritzing.png"/>
 				</section>
 
 				<section id="wiring-photo">
-					<p class="stretch"><img src="images/wired.jpg"/></p>
-					<p><small>using an LED strip connector</small></p>
+					<p class="stretch"><img data-src="images/wired.jpg"/></p>
+					<p><small>using an LED strip connector... note the arrow direction</small></p>
 				</section>
 
 				<section id="level-shifting">
@@ -288,7 +295,7 @@ void loop() {
 
 				<section id="read-power-supply">
 					<h2>Reading a Power Supply</h2>
-					<p><a href="https://amzn.to/2Ro8FeA"><figure><img src="images/5v.jpg" style="margin:0;"/><figcaption><small>Amazon.com</small></figcaption></figure></a></p>
+					<p><a href="https://amzn.to/2Ro8FeA"><figure><img data-src="images/5v.jpg" style="margin:0;"/><figcaption><small>Amazon.com</small></figcaption></figure></a></p>
 					<p style="position:absolute;top:30%;left:-140px;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;" class="fragment"><strong>INPUT</strong><br>∿ <a href="https://en.wikipedia.org/wiki/Alternating_current"><strong>A</strong>lternating <strong>C</strong>urrent</a><br>100-240V</p>
 					<p style="position:absolute;top:30%;right:-50px;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;" class="fragment"><strong>OUTPUT</strong><br>⎓ <a href="https://en.wikipedia.org/wiki/Direct_current"><strong>D</strong>irect <strong>C</strong>urrent</a><br>5V<br>3000 mA</p>
 					<p style="position:absolute;top:15%;margin-left:auto;margin-right:auto;left:0;right:0;background:rgba(0,0,0,.75);padding:10px;border-radius:10px;" class="fragment">Switching (vs Transformer)</p>
@@ -401,7 +408,7 @@ void loop_led() {
 				</section>
 
 				<section id="show-current-color-4">
-					<p class="stretch"><img src="images/currentcolor.jpg"/></p>
+					<p class="stretch"><img data-src="images/currentcolor.jpg"/></p>
 				</section>
 
 				<section id="show-current-color-5">
@@ -420,6 +427,7 @@ void loop_led() {
 				<section id="save">
 					<h2>💾 Save Your Work 💾</h2>
 					<p>This is a good point to save your sketch. The Blink example which we have based our work on so far is read only, so it will prompt you to save your sketch to a new location when using File > Save.</p>
+					<p>With the default preferences, the sketch will be automatically saved on each compile/upload going forward.</p>
 				</section>
 
 				<section id="wifi-begin">
@@ -484,12 +492,12 @@ void setup() {
 				</section>
 
 				<section id="wifimanager-ap">
-					<p class="stretch"><img src="images/wifimanager1.png"></p>
+					<p class="stretch"><img data-src="images/wifimanager1.png"></p>
 					<p><small>Once connected, you should see a prompt to sign in (e.g., "Tap here to sign in to network"). Otherwise, open <a href="http://192.168.4.1">http://192.168.4.1</a> in a browser.</small></p>
 				</section>
 
 				<section id="wifimanager-captiveportal">
-					<p class="stretch"><img src="images/wifimanager2.png"> <img src="images/wifimanager3.png"> <img src="images/wifimanager4.png"></p>
+					<p class="stretch"><img data-src="images/wifimanager2.png"> <img data-src="images/wifimanager3.png"> <img data-src="images/wifimanager4.png"></p>
 					<p><small>Select your network and provide the credentials</small></p>
 				</section>
 
@@ -781,11 +789,8 @@ Hello, World!
 
 				<section id="spiffs">
 					<h2>SPIFFS</h2>
-					<p><abbr title="Serial Peripheral Interface Flash File System">SPIFFS</abbr> is a file system that we can use to store persistent data. We will use it to store:</p>
-					<ul>
-						<li>static web content (HTML, CSS, JS) to be served by the webserver</li>
-						<li>a JSON representation of the current state (later)</li>
-					</ul>
+					<p><abbr title="Serial Peripheral Interface Flash File System">SPIFFS</abbr> is a file system that we can use to store <em>persistent</em> data. We will use it to store static web content (HTML, CSS, JS) to be served by the webserver.</p>
+					<p>It can also be used to store other data. For example, a JSON representation of the current state.</li>
 				</section>
 
 				<section id="esp8266fs-plugin">
@@ -825,7 +830,7 @@ Hello, World!
 
 				<section id="test-html">
 					<p>After uploading, you should now be able to view the webpage on a browser:</p>
-					<img src="images/helloworld-webpage.png"/>
+					<img data-src="images/helloworld-webpage.png"/>
 				</section>
 
 				<section id="real-html">
@@ -1029,7 +1034,69 @@ function sendState(stateObj) {
 				</section>
 
 				<section id="new-index-html">
-					<p class="stretch"><img src="images/newindexhtml.png"/></p>
+					<p class="stretch"><img data-src="images/newindexhtml.png"/></p>
+				</section>
+
+				<section id="colorloop">
+					<h2>Effect: colorloop</h2>
+					<p>Replace the following line in <code>loop_led()</code>:<pre><code class="cpp">    FastLED.showColor(currentColor);</code></pre>... with this:<pre><code class="cpp copy">    if (strcmp(effect, "none") == 0) {
+      FastLED.showColor(currentColor);
+    } else if (strcmp(effect, "colorloop") == 0) {
+      colorloop();
+    }</code></pre></p>
+				</section>
+
+				<section id="colorloop2">
+					<p>Add the following function below the <code>loop_led()</code> function:</p>
+					<pre><code class="cpp copy">/**
+  Logic for the "colorloop" effect. It overrides the hue of the current color by a adding a constantly incrementing hue offset.
+  The summed hue value is automatically kept in the expected range of 0-255, due to the uint8_t type.
+  see: https://github.com/FastLED/FastLED/wiki/FastLED-HSV-Colors#why-fastled-full-range-one-byte-hues-are-faster
+*/
+void colorloop() {
+  static uint8_t colorloopHueOffset = 0;
+  EVERY_N_MILLISECONDS(10) {
+    CHSV colorloopColor = CHSV(++colorloopHueOffset + currentColor.h, currentColor.s, currentColor.v);
+    FastLED.showColor(colorloopColor);
+  }
+}</code></pre>
+				</section>
+
+				<section id="colorloop-video" data-background-video="images/colorloop.mp4" data-background-video-loop="true" data-background-video-muted="true" data-background-size="contain">
+				</section>
+
+				<section id="trail">
+					<h2>Effect: trail</h2>
+					<p>This effect makes use of the addressable nature of the WS2812B. Up until this point, all FastLED operations had been applied to the entire strip. However, this one has varying brightness of LEDs at the same time.</p>
+				</section>
+
+				<section id="trail2">
+					<p>Add one more <code>else</code> clause to the <code>loop_led()</code> function:</p>
+					<pre><code class="cpp copy">    } else if (strcmp(effect, "trail") == 0) {
+      trail();
+    }</code></pre>
+				</section>
+
+				<section id="trail3">
+					<p>Add the following function below the <code>loop_led()</code> function:</p>
+					<pre><code class="cpp copy">/**
+  Logic for the "trail" effect. A colored dot with a fading trail moves along the LEDs, wrapping when it reaches the end.
+*/
+void trail() {
+  static unsigned int pos = 0;
+  EVERY_N_MILLISECONDS(10) {
+    fadeToBlackBy(leds, NUM_LEDS, 8);
+    FastLED.show();
+  }
+  EVERY_N_MILLISECONDS(100) {
+    pos = ++pos % NUM_LEDS;
+    leds[pos] = currentColor;
+    FastLED.show();
+  }
+}</code></pre>
+				</section>
+
+				<section id="trail-video" data-background-video="images/trail.mp4" data-background-video-loop="true" data-background-video-muted="true" data-background-size="contain">
 				</section>
 
 				<section id="remote-access">
@@ -1054,7 +1121,7 @@ function sendState(stateObj) {
 				</section>
 
 				<section id="mqtt-diagram">
-					<img src="images/mqtt.png"/>
+					<img data-src="images/mqtt.png"/>
 					<p><small>📷: <a href="https://www.appcelerator.com/blog/2018/03/api-builder-and-mqtt-for-iot-part-1/">https://www.appcelerator.com/blog/2018/03/api-builder-and-mqtt-for-iot-part-1/</a></small></p>
 				</section>
 
@@ -1062,28 +1129,29 @@ function sendState(stateObj) {
 					<h2>Adafruit IO</h2>
 					<p><a href="https://io.adafruit.com">Adafruit IO</a> meets all of the criteria that I was looking for in a MQTT broker:</p>
 					<ul>
+						<li>free tier available</li>
 						<li>cloud service platform</li>
 						<li>MQTT API</li>
 						<li>REST API</li>
-						<li>free tier available</li>
+						<li>encrypted communication channels available</li>
 						<li><a href="https://ifttt.com">IFTTT</a> integration</li>
 					</ul>
 				</section>
 
-				<section id="aio-create-feeds">
-					<h2>Create Feeds</h2>
-					<p class="stretch"><img src="images/io.adafruit.com_createfeed.png"/></p>
+				<section id="aio-create-feed">
+					<h2>Create Feed</h2>
+					<p class="stretch"><img data-src="images/io.adafruit.com_createfeed.png"/></p>
 					<p><small>Feeds &gt; Actions &gt; Create a New Feed</small></p>
 				</section>
 
 				<section id="aio-create-feeds2">
 					<p>Create a feed named "light-set"</p>
-					<p class="stretch"><img src="images/io.adafruit.com_feedscreated.png"/></p>
+					<p class="stretch"><img data-src="images/io.adafruit.com_feedscreated.png"/></p>
 				</section>
 
 				<section id="aio-key">
 					<p>Click on "View AIO Key" on the left and make note of the username and key value</p>
-					<p class="stretch"><img src="images/io.adafruit.com_key.png"/></p>
+					<p class="stretch"><img data-src="images/io.adafruit.com_key.png"/></p>
 					<p><small>don't worry, I've since regenerated my key 😜</small></p>
 				</section>
 
@@ -1165,7 +1233,7 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 				<section id="aio-adddata">
 					<h2>Add Data to the Feed</h2>
 					<p>Add some data to change the color:<pre><code class="json copy">{"color":{"h":180}}</code></pre></p>
-					<p class="stretch"><img src="images/io.adafruit.com_adddata.png"/></p>
+					<p class="stretch"><img data-src="images/io.adafruit.com_adddata.png"/></p>
 					<p><small>Feeds &gt; light-set &gt; Actions &gt; Add Data</small></p>
 				</section>
 
@@ -1174,73 +1242,84 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 					<p><a href="https://ifttt.com">IFTTT</a> stands for "if this, then that". It is a service that connects other services together based on rules/events that you define called applets. We will use it to connect Google Assistant and Alexa to Adafruit IO.</p>
 				</section>
 
+				<!-- TODO diagram here -->
+
 				<section id="ifttt-aio">
 					<h2>Connect to Adafruit IO</h2>
 					<p>Go to <a href="https://ifttt.com/adafruit">https://ifttt.com/adafruit</a> to connect IFTTT to Adafruit IO</p>
-					<p class="stretch"><img src="images/ifttt.com_adafruit.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_adafruit.png"/></p>
 				</section>
 
 				<section id="ifttt-aio-authorize">
 					<p>After clicking on Connect, you will see a screen asking you to authorize access to AIO</p>
-					<p class="stretch"><img src="images/adafruit_authorize_ifttt.png"/></p>
+					<p class="stretch"><img data-src="images/adafruit_authorize_ifttt.png"/></p>
 				</section>
 
-				<section id="ifttt-assistant">
+				<section id="ifttt-assistant-connect">
 					<h2>Connect to Google Assistant</h2>
 					<p>Go to <a href="https://ifttt.com/google_assistant">https://ifttt.com/google_assistant</a> to connect IFTTT to Google Assistant</p>
-					<p class="stretch"><img src="images/ifttt.com_assistant.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_assistant.png"/></p>
 				</section>
 
-				<section id="ifttt-alexa">
+				<section id="ifttt-alexa-connect">
 					<h2>Connect to Alexa</h2>
 					<p>Go to <a href="https://ifttt.com/amazon_alexa">https://ifttt.com/amazon_alexa</a> to connect IFTTT to Amazon Alexa</p>
-					<p class="stretch"><img src="images/ifttt.com_alexa.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_alexa.png"/></p>
 				</section>
 
 				<section id="ifttt-create-applet">
 					<h2>Create an Applet</h2>
 					<p>My Applets &gt; New Applet</p>
-					<p class="stretch"><img src="images/ifttt.com_newapplet.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_newapplet.png"/></p>
 				</section>
 
 				<section id="ifttt-thisassistant">
 					<h2>this</h2>
 					<p>For the "this" part of the applet, we will select the Google Assistant service</p>
-					<p class="stretch"><img src="images/ifttt.com_newapplet1.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_newapplet1.png"/></p>
 				</section>
 
 				<section id="ifttt-assistant-trigger">
 					<p>Choose the "Say a phrase with a number" trigger</p>
-					<p class="stretch"><img src="images/ifttt.com_newapplet2.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_newapplet2.png"/></p>
 				</section>
 
 				<section id="ifttt-assistant-form">
 					<p>Fill out the form like so and click "Create trigger":</p>
-					<p class="stretch"><img src="images/ifttt.com_phrase.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_phrase.png"/></p>
 				</section>
 
 				<section id="ifttt-this-done">
-					<p class="stretch"><img src="images/ifttt.com_thisdone.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_thisdone.png"/></p>
 				</section>
 
 				<section id="ifttt-thataio">
 					<h2>that</h2>
 					<p>For the "that" part of the applet, we will select Adafruit</p>
-					<p class="stretch"><img src="images/ifttt.com_newapplet3.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_newapplet3.png"/></p>
 				</section>
 
 				<section id="ifttt-aio-choose-action">
-					<p class="stretch"><img src="images/ifttt.com_newapplet4.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_newapplet4.png"/></p>
 				</section>
 
 				<section id="ifttt-aio-send-data">
 					<p>Fill out the form like so and click "Create action":</p>
-					<p class="stretch"><img src="images/ifttt.com_newapplet5.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_newapplet5.png"/></p>
 				</section>
 
 				<section id="ifttt-review">
-					<p class="stretch"><img src="images/ifttt.com_newapplet6.png"/></p>
+					<p class="stretch"><img data-src="images/ifttt.com_newapplet6.png"/></p>
 				</section>
+
+				<section id="ifttt-alexa-party">
+					<h2>🎉 Party Time With Alexa 🎉</h2>
+					<p class="stretch"><img data-src="images/partytime.png"/> <img data-src="images/adafruit-colorloop.png"/></p>
+				</section>
+
+
+
+
 
 				<section id="lamp-assembly">
 					<h2>Lamp Assembly</h2>
@@ -1260,34 +1339,28 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 					<!-- TODO photos/instructions on wrapping led around tube -->
 				</section>
 
+
+
+
+
+
 				<section id="3d-printed-tube">
-					<h2>Shameless Plug</h2>
-					<!-- TODO shameless plug for my own 3d printed design -->
+					<h2>Next Steps: Replace the Cardboard Tube</h2>
+					<p class="stretch"><img data-src="images/d1mount-tube-thingiverse3249760.jpg"/><img data-src="images/tube-thingiverse3249760.jpg"/></p>
+					<small><a href="https://www.thingiverse.com/thing:3249760">https://www.thingiverse.com/thing:3249760</a></small>
 				</section>
 
-				<section id="colorloop">
-					<h2>Effect: colorloop</h2>
-				</section>
-
-				<section id="websockets">
-					<p>WebSockets can provide a low-latency communication channel which can broadcast changes to all connected clients</p>
-					<!-- TODO more on this -->
-				</section>
-
-				<section id="trail">
-					<h2>Effect: trail</h2>
-					<p>This effect makes use of the addressable nature of the WS2812B. Up until this point, all FastLED operations had been applied to the entire strip. However, this one has varying brightness of LEDs at the same time.</p>
-					<!-- TODO include animated gif of trail effect -->
-				</section>
-
-				<section id="why-tvars">
-					<h2>Next Steps: Other Lamp Enclosures</h2>
-					<p>The <a href="https://www.ikea.com/us/en/catalog/products/60356144/">TVÄRS lamp</a> was chosen as the base due to its low cost ($4 USD) and ease of modding, allowing us to focus on the electronics and software. The same electronics components can be used in almost any lamp or enclosure you can imagine, whether they are premade like the TVÄRS, handmade, 3D printed, or laser cut.
-				</section>
-
-				<section id="example-enclosures">
+				<section id="wifilight">
+					<h2>Next Steps: WiFiLight</h2>
+					<p><i class="fab fa-github"></i> <a href="https://github.com/leoclee/WiFiLight">https://github.com/leoclee/WiFiLight</a></p>
+					<p>Super-creatively named project, which this workshop's code was based on. Features include:</p>
 					<ul>
-						<li><a href="https://www.thingiverse.com/thing:912315">Alien Cube</a></li>
+						<li>fade transition between colors</li>
+						<li>WebSockets - low latency communication; changes from multiple users are seen by all connected clients</li>
+						<li>state save - handles power loss</li>
+						<li>additional effects</li>
+						<li>WiFi reset</li>
+						<li>diagnostic info from browser</li>
 					</ul>
 				</section>
 
@@ -1302,13 +1375,24 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 
 				<section id="d1-mini-fuse">
 					<p>The D1 mini has a 500 mA fuse that limits the current that the 5V pin can supply</p>
-					<p class="stretch"><img src="images/d1minifuse.png"/></p>
+					<p class="stretch"><img data-src="images/d1minifuse.png"/></p>
 					<p><small><a href="https://wiki.wemos.cc/_media/products:d1:sch_d1_mini_v3.0.0.pdf">https://wiki.wemos.cc/_media/products:d1:sch_d1_mini_v3.0.0.pdf</a></small></p>
 				</section>
 
-				<section>
-					<!-- TODO new wiring (fritzing?) diagram -->
+				<!-- TODO new wiring (fritzing?) diagram -->
+
+				<section id="other-enclosures">
+					<h2>Next Steps: Other Lamp Enclosures</h2>
+					<p>The <a href="https://www.ikea.com/us/en/catalog/products/60356144/">TVÄRS lamp</a> was chosen as the base due to its low cost ($4 USD) and ease of modding, allowing us to focus on the electronics and software. The same electronics components can be used in almost any lamp or enclosure you can imagine, whether they are premade like the TVÄRS, handmade, 3D printed, or laser cut.
 				</section>
+
+				<!-- TODO find some example enclosures
+				<section id="example-enclosures">
+					<ul>
+						<li><a href="https://www.thingiverse.com/thing:912315">Alien Cube</a></li>
+					</ul>
+				</section>
+				-->
 
 				<section id="other-project-ideas">
 					<h2>Next Steps: Other Project Ideas</h2>
