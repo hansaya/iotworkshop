@@ -547,7 +547,7 @@ WiFi Hostname: LIGHT-ABC123</pre>
 
 				<section id="http-server">
 					<h2>HTTP server</h2>
-					<p>We will set up an HTTP server to handle incoming requests to either query for the current state or change the current state.</p>
+					<p>We will set up an <abbr title="Hypertext Transfer Protocol">HTTP</abbr> server to handle incoming requests to either query for the current state or change the current state.</p>
 					<p>First, we need to add a global variable for our HTTP server. You can put this under the "WiFi" section of global variables:</p>
 					<pre><code class="cpp copy">// HTTP server
 #define HTTP_SERVER_PORT 80
@@ -766,7 +766,6 @@ void handleJsonPayload(const char* payload) {
 				<section id="webpage">
 					<h2>Time To Build A Webpage</h2>
 					<p>The <code>curl</code> command line tool has successfully demonstrated remote control of our LEDs. However, we probably want a more user-friendly way of interacting with our server using a browser.</p>
-					<!-- TODO screenshot of webpage -->
 				</section>
 
 				<section id="html-file">
@@ -806,8 +805,8 @@ Hello, World!
 					<ul>
 						<li>before uploading data, close the Serial Monitor window</li>
 						<li>Tools > ESP8266 Sketch Data Upload</li>
-						<!-- TODO grab screenshot from https://github.com/esp8266/arduino-esp8266fs-plugin -->
 					</ul>
+					<p class="stretch"><img data-src="images/sketch-data-upload.png"/></p>
 				</section>
 
 				<section id="serve-static">
@@ -1067,7 +1066,7 @@ void colorloop() {
 
 				<section id="trail">
 					<h2>Effect: trail</h2>
-					<p>This effect makes use of the addressable nature of the WS2812B. Up until this point, all FastLED operations had been applied to the entire strip. However, this one has varying brightness of LEDs at the same time.</p>
+					<p>This effect makes use of the <em>addressable</em> nature of WS2812B strips. Up until this point, all FastLED operations had been applied to the entire strip. However, this one has varying brightness of LEDs at the same time.</p>
 				</section>
 
 				<section id="trail2">
@@ -1100,7 +1099,7 @@ void trail() {
 				</section>
 
 				<section id="remote-access">
-					<h2>Remote Access</h2>
+					<h2>📡 Remote Access 📡</h2>
 					<p>So far, we've been accessing our webserver while connected to the same network. In order to access this page remotely, there are a few options:</p>
 					<ul>
 						<li>VPN client/server</li>
@@ -1242,7 +1241,8 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 					<p><a href="https://ifttt.com">IFTTT</a> stands for "if this, then that". It is a service that connects other services together based on rules/events that you define called applets. We will use it to connect Google Assistant and Alexa to Adafruit IO.</p>
 				</section>
 
-				<!-- TODO diagram here -->
+				<section id="ifttt-flow" data-background-image="images/flow.png" data-background-size="contain">
+				</section>
 
 				<section id="ifttt-aio">
 					<h2>Connect to Adafruit IO</h2>
@@ -1312,37 +1312,79 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 					<p class="stretch"><img data-src="images/ifttt.com_newapplet6.png"/></p>
 				</section>
 
+				<section id="ifttt-assistant-test">
+					<p>Let's try it out using the <a href="https://support.google.com/assistant/answer/7172657?co=GENIE.Platform%3DAndroid&hl=en&oco=0">Google Assistant app</a></p>
+					<p class="stretch"><img data-src="images/assistant-test.png"/></p>
+				</section>
+
 				<section id="ifttt-alexa-party">
 					<h2>🎉 Party Time With Alexa 🎉</h2>
+					<p>The setup for Alexa will be very similar</p>
 					<p class="stretch"><img data-src="images/partytime.png"/> <img data-src="images/adafruit-colorloop.png"/></p>
 				</section>
 
-
-
-
-
 				<section id="lamp-assembly">
 					<h2>Lamp Assembly</h2>
-					<p>Now that we know that the LEDs are working as expected, it is time to start putting our lamp together.</p>
 				</section>
 
-				<section id="tvars-remove-socket">
+				<section id="tvars-remove-socket1">
+					<p>Remove the socket from the base</p>
+					<p class="stretch"><img data-src="images/tvars-remove-socket1.jpg"/></p>
+				</section>
+
+				<section id="tvars-remove-socket2">
+					<p class="stretch"><img data-src="images/tvars-remove-socket2.jpg"/></p>
+				</section>
+
+				<section id="tvars-remove-socket3">
+					<p class="stretch"><img data-src="images/tvars-remove-socket3.jpg"/></p>
+				</section>
+
+				<section id="tvars-remove-socket4">
+					<p class="stretch"><img data-src="images/tvars-remove-socket4.jpg"/></p>
+				</section>
+
+				<section id="tvars-remove-socket5">
+					<p class="stretch"><img data-src="images/tvars-remove-socket5.jpg"/></p>
+				</section>
+
+				<section id="tvars-rubber-band">
+					<p>Secure the D1 mini using the included rubber band</p>
+					<p class="stretch"><img data-src="images/rubberband.jpg"/></p>
+				</section>
+
+				<section id="tvars-attach-legs">
+					<p>Attach the legs</p>
+					<p class="stretch"><img data-src="images/attachlegs.jpg"/></p>
 				</section>
 
 				<section id="tube-cut">
-					<!-- TODO add link to cut guide PDF -->
-					<p>Using the cut guide, cut 3 slits up the cardboard tube</p>
-					<!-- TODO add photo -->
+					<p>Using the <a href="images/cutguide.pdf">cut guide</a>, cut three 1" slits up the cardboard tube</p>
+					<p class="stretch"><img data-src="images/cutguide.jpg"/></p>
+				</section>
+
+				<section id="tube-cut1">
+					<p class="stretch"><img data-src="images/cut-tube1.jpg"/></p>
+				</section>
+
+				<section id="tube-cut2">
+					<p class="stretch"><img data-src="images/cut-tube2.jpg"/></p>
+				</section>
+
+				<section id="tube-install">
+					<p>Squeeze the bottom of the tube into a triangle shape that fits snugly into the base.</p>
+					<p class="stretch"><img data-src="images/install-tube.jpg"/></p>
 				</section>
 
 				<section id="led-wrap">
-					<!-- TODO photos/instructions on wrapping led around tube -->
+					<p>Wrap the LED strip around the tube and secure it using the adhesive backing, tape, hot glue, etc.</p>
+					<!-- TODO photo -->
 				</section>
 
-
-
-
-
+				<section id="lamp-shade">
+					<p>Place the lamp shade on the base</p>
+					<!-- TODO photo -->
+				</section>
 
 				<section id="3d-printed-tube">
 					<h2>Next Steps: Replace the Cardboard Tube</h2>
@@ -1353,8 +1395,8 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
 				<section id="wifilight">
 					<h2>Next Steps: WiFiLight</h2>
 					<p><i class="fab fa-github"></i> <a href="https://github.com/leoclee/WiFiLight">https://github.com/leoclee/WiFiLight</a></p>
-					<p>Super-creatively named project, which this workshop's code was based on. Features include:</p>
 					<ul>
+						<li>OTA updates</li>
 						<li>fade transition between colors</li>
 						<li>WebSockets - low latency communication; changes from multiple users are seen by all connected clients</li>
 						<li>state save - handles power loss</li>
