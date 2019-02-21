@@ -56,43 +56,46 @@
 			<div class="slides">
 				<section id="title" data-background-image="images/lamp.jpg" data-background-opacity=".1">
 					<h1>IoT Workshop</h1>
-					<p>Leonard Lee, Hans Perera, Max</p>
-					<p><a href="https://github.com/hansaya"><small><i class="fab fa-github"></i> hans perera</small></a></p>
+					<p>Leonard Lee, Hans Perera, Max Philips</p>
+					<p><a href="https://github.com/hansaya"><small><i class="fab fa-github"></i>hans perera</small></a></p>
 				</section>
 
-				<section id="iot-definition">
-					<h2>Internet of Things (IoT)</h2>
-					<blockquote cite="https://en.wikipedia.org/wiki/Internet_of_things">
-						&ldquo;extend[s] Internet connectivity beyond standard devices, such as desktops, laptops, smartphones and tablets, to any range of traditionally dumb or non-internet-enabled physical devices and everyday objects&rdquo;
-					</blockquote>
-				</section>
+				<section>
+					<section id="iot-definition">
+						<h2>Internet of Things (IoT)</h2>
+						<blockquote cite="https://en.wikipedia.org/wiki/Internet_of_things">
+							&ldquo;extend[s] Internet connectivity beyond standard devices, such as desktops, laptops, smartphones and tablets, to any range of traditionally dumb or non-internet-enabled physical devices and everyday objects&rdquo;
+						</blockquote>
+					</section>
 
-				<section id="iot-examples" data-background-image="images/network-782707_1280-980x637.png" data-background-opacity=".1">
-					<!-- background image by jeferrb from https://pixabay.com/en/network-iot-internet-of-things-782707/ -->
-					<h2>Things Like These:</h2>
-					<ul>
-						<li>speakers</li>
-						<li>televisions</li>
-						<li>lighting</li>
-						<li>thermostats</li>
-						<li>kitchen appliances</li>
-						<li>vehicles/planes</li>
-						<li>fitness equipment</li>
-						<li>vending machines/kiosks</li>
-						<li>switches/outlets</li>
-					</ul>
-				</section>
+					<section id="iot-examples" data-background-image="images/network-782707_1280-980x637.png" data-background-opacity=".1">
+						<!-- background image by jeferrb from https://pixabay.com/en/network-iot-internet-of-things-782707/ -->
+						<h2>Things Like These:</h2>
+						<ul>
+							<li>speakers</li>
+							<li>televisions</li>
+							<li>lighting</li>
+							<li>thermostats</li>
+							<li>kitchen appliances</li>
+							<li>vehicles/planes</li>
+							<li>fitness equipment</li>
+							<li>vending machines/kiosks</li>
+							<li>switches/outlets</li>
+						</ul>
+					</section>
 
-				<section id="iot-why">
-					<h2>Why?</h2>
-					<p>Connecting devices to the internet and to each other provide some form of value:</p>
-					<ul>
-						<li>remote access</li>
-						<li>home automation (smart homes)</li>
-						<li>cloud integration</li>
-						<li>real time monitoring/tracking/notification</li>
-					</ul>
+					<section id="iot-why">
+						<h2>Why?</h2>
+						<p>Connecting devices to the internet and to each other provide some form of value:</p>
+						<ul>
+							<li>remote access</li>
+							<li>home automation (smart homes)</li>
+							<li>cloud integration</li>
+							<li>real time monitoring/tracking/notification</li>
+						</ul>
+					</section>
 				</section>
+				
 
 				<section id="objectives">
 					<h2>Objectives</h2>
@@ -465,8 +468,7 @@ void loop()
 				</section>
 				<section>
 					<section id="serial-communications">
-						<h2>Lets use the LCD</h2>
-						<p><a href="https://playground.arduino.cc/Main/InterfacingWithHardware">First, How can I interface with other hardware?</a></p>
+						<h2><a href="https://playground.arduino.cc/Main/InterfacingWithHardware">How can I interface with other hardware?</a></h2>
 						<ol>
 							<li><a href="https://en.wikipedia.org/wiki/1-Wire">Dallas 1-Wire</a></li>
 							<li><a href="https://en.wikipedia.org/wiki/Ethernet">Ethernet</a></li>
@@ -477,13 +479,15 @@ void loop()
 					</section>
 
 					<section id="i2c">
+						<h2>I2C</h2>
 						<p class="stretch"><img data-src="images/i2c/i2c-network.png"> <img data-src="images/i2c/i2c-data.png"></p>						
 					</section>
+				</section>
 
-					<section id="lcd-code">
-						<h2>Write to the LCD</h2>
-						<p><small>install the u8g2 library using Arduino IDE</small></p>
-						<pre><code class="cpp copy">#include &lt;U8g2lib.h&gt;
+				<section id="lcd-code">
+					<h2>Lets use the LCD</h2>
+					<p><small>install the u8g2 library using Arduino IDE</small></p>
+					<pre><code class="cpp copy">#include &lt;U8g2lib.h&gt;
 
 U8G2_SSD1306_128X32_UNIVISION_F_SW_I2C u8g2(U8G2_R0, /* clock=*/ 5, /* data=*/ 4, /* reset=*/ 16);
 
@@ -498,9 +502,8 @@ void loop() {
     u8g2.drawStr(0,24,"Hello World!");
   } while ( u8g2.nextPage() );
 }
-						</code></pre>
-					</section>
-				<section>
+					</code></pre>
+				</section>
 				<section>
 					<section id="wifi-begin">
 						<h2>Connecting to WiFi the easy way</h2>
