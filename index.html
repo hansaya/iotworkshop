@@ -99,7 +99,7 @@
 					<ul>
 							<li>Learn Basics of Electronics</li>
 							<li>Learn to use Arduino IDE</li>
-							<li>Learn about various WIFI protacols</li>
+							<li>Learn about various WIFI protocols</li>
 							<li>Learn to use Blynk app</li>
 							<li>Create a Blynk app widgets</li>
 					</ul>
@@ -135,13 +135,31 @@
 						<img data-src="images/ohmLaw/resistance.png"/>
 					</section>
 
-					<section id="ohmlaw" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
+					<section id="polarity" data-background-image="images/ohmLaw/proton-696x392.jpg" data-background-opacity=".1">
+						<h2>polarity</h2>
+						<img data-src="images/ohmLaw/voltage-polarity.png"/>
+					</section>
+
+					<section id="current-flow" data-background-image="images/ohmLaw/proton-696x392.jpg" data-background-opacity=".1">
+						<h2>current flow</h2>
+						<img data-src="images/ohmLaw/current-flow.gif"/>
+					</section>
+
+					<section id="complete-circuit" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
+						<img data-src="images/ohmLaw/WaterCircuitAnalogy.png"/>
+					</section>
+
+					<section id="ohmlaw-1" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
 						<h2>Ohm's Law</h2>
-						<img data-src="images/ohmLaw/ohmlaw.png"/>
+						<blockquote cite="https://www.physics.uoguelph.ca/tutorials/ohm/Q.ohm.intro.html" style="font-size:32px">
+							&ldquo;The potential difference (voltage) across an ideal conductor is proportional to the current through it. The constant of proportionality is called the "resistance", R. Ohm's Law is given by: V = I R where V is the potential difference between two points which include a resistance R.&rdquo;
+						</blockquote>						
+						<img data-src="images/ohmLaw/ohms-law-triangle.svg"/>
 					</section>
 
 					<section id="ohmlaw-2" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
-						<img data-src="images/ohmLaw/WaterCircuitAnalogy.png"/>
+						<h2>Ohm's Law</h2>
+						<img data-src="images/ohmLaw/ohmlaw.png"/>
 					</section>
 
 					<section id="quiz" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".25">
@@ -152,24 +170,30 @@
 							<li>I=500mA, R=500ohm, V=? </li>
 						</ul>
 					</section>				
-					
-					<section id="polarity" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
-						<h2>polarity</h2>
-						<img data-src="images/ohmLaw/voltage-polarity.png"/>
-					</section>
-
-					<section id="current-flow" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
-						<h2>current flow</h2>
-						<img data-src="images/ohmLaw/current-flow.gif"/>
-					</section>
 
 					<section id="power" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
 						<h2>power</h2>
-						<img data-src="images/ohmLaw/power-eq.jpg"/>
+						<blockquote cite="https://en.wikipedia.org/wiki/Electric_power" style="font-size:32px">
+							&ldquo;Electric power is the rate, per unit time, at which electrical energy is transferred by an electric circuit. The SI unit of power is the watt, one joule per second. Electric power is usually produced by electric generators, but can also be supplied by sources such as electric batteries..&rdquo;
+						</blockquote>	
+
+						\[\mathbf{P} = Work Done Per Unit Time = \frac{VQ}{t} = \mathbf{VI} \]
+
+						<img data-src="images/ohmLaw/pika-power.gif"/>
 					</section>
 
-					<section id="power-example" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
+					<section id="power-example-1" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
 						<h2>power example</h2>
+						<p class="stretch">
+							<img data-src="images/ohmLaw/power_example_2.png"/>
+							<ul>
+								<li>Current running through the wires? \[\mathbf{9}v = \mathbf{I} \times \mathbf{10}ohm \\ \mathbf{I}=\mathbf{0.9}A \]</li>
+								<li>Energy converted to heat? \[{\mathbf{P} = \mathbf{0.9A} \times \mathbf{9}v} \\ {\mathbf{P}=\mathbf{8.1}W} \]</li>
+							</ul>
+						</p>
+					</section>
+
+					<section id="power-example-2" data-background-image="images/ohmLaw/math.jpg" data-background-opacity=".1">
 						<img data-src="images/ohmLaw/power_example.png"/>
 					</section>
 				</section>
@@ -518,7 +542,7 @@ void loop() {
 						</code></pre>
 					</section>
 				</section>
-				<section>
+				<section data-background-image="images/wifiMan/wifi.jpg" data-background-opacity=".1">
 					<section id="wifi-begin">
 						<h2>Connecting to WiFi the easy way</h2>
 						<p>Set up <a href="https://github.com/tzapu/WiFiManager">WiFiManager</a>, which will make it unnecessary to hardcode our WiFi connection info.</p>
@@ -579,13 +603,13 @@ WiFi Hostname: LIGHT-ABC123</pre>
 				</section>
 
 				<section id="other-project-ideas">
-					<h2>Next Steps: Other Project Ideas</h2>
+					<h2>Next Steps: Project Ideas</h2>
 					<ul>
-						<li>notification light: blink or change color on events (e.g., new email/tweets, stock alerts)</li>
-						<li>audio visualization: add a microphone for sound/music reactive lighting</li>
-						<li>nightlight: add a <a href="https://en.wikipedia.org/wiki/Photoresistor">photoresistor</a> to automatically adjust brightness</li>
-						<li>clock: synch with NTP and gradually fade from one color to another over each hour</li>
-						<li>long distance friendship lamps</li>
+						<li>Garage Opener</li>
+						<li>Door Sensor</li>
+						<li>Irrigation Control</li>
+						<li>Weather station</li>
+						<li>Indoor light control</li>
 					</ul>
 				</section>
 			</div>
@@ -605,7 +629,8 @@ WiFi Hostname: LIGHT-ABC123</pre>
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/math/math.js', async: true }
 				]
 			});
 
